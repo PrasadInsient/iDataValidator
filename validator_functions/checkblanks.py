@@ -1,0 +1,35 @@
+from survey_model import DATA, COLUMNS, QUESTIONS, Column, Columns, Question, Questions 
+from logs import adderror
+
+import pandas as pd
+import numpy as np
+import re
+
+def check_for_blanks(cols_to_check):
+    """
+    Check if specified columns contain blank (NaN) values.
+
+    Parameters:
+    df (pd.DataFrame): The DataFrame to check.
+    cols_to_check (str or list): Column name or list of column names to check for blank values.
+
+    Returns:
+    pd.Series: Boolean series indicating if the specified columns are blank for each row.
+    
+    Usage:
+    check_for_blanks('A'))
+    check_for_blanks(['A','B']))
+    """
+    if isinstance(cols_to_check, str):
+        cols_to_check = [cols_to_check]
+
+    def check_row(row):
+        for col in cols_to_check:
+            value = row[col]
+            if pd.isna(value) or (isinstance(value, str) and len(value.strip()) == 0):
+                adderror(row['record'], col, row[col], f"Column {col} is blank")
+        return True  # Return True to satisfy the return type expected by apply
+
+
+    # Apply the check_row function to each row
+    DATA.apply(check_row, axis=1)
