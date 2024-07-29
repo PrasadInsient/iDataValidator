@@ -10,7 +10,7 @@ import pandas as pd
 from .checkcondition import check_condition
 from typing import List, Optional, Any
 
-def backcheck_single(df: pd.DataFrame, source: str, cols_to_check: List[str], condition: Optional[str] = None):
+def backcheck_single(source: str, cols_to_check: List[str], condition: Optional[str] = None):
     """
     Check if the source column value matches the cols_to_check index based on condition.
 
@@ -28,4 +28,4 @@ def backcheck_single(df: pd.DataFrame, source: str, cols_to_check: List[str], co
         return True
 
     
-    df.apply(check_row, axis=1) #type:ignore
+    DATA.apply(check_row, axis=1) #type:ignore

@@ -7,7 +7,7 @@ from typing import List
 
 from validator_functions import *
 
-def atleast_atmost(df, cols_to_check, condition=None, at_least=None, at_most=None):
+def atleast_atmost(cols_to_check, condition=None, at_least=None, at_most=None):
     """
     Check if specified columns meet certain conditions and count the number of columns that do.
 
@@ -38,32 +38,4 @@ def atleast_atmost(df, cols_to_check, condition=None, at_least=None, at_most=Non
             return False
         return True
 
-    valid_mask = df.apply(check_row, axis=1)
-    invalid_records = df[~valid_mask]
-    return invalid_records
-
-# Example usage:
-data = {
-    'record': [1, 2, 3, 4],
-    'A': [1, None, 3, None],
-    'B': [None, 2, 3, None],
-    'C': [7, 8, None, None],
-    'D': [10, 11, 12, 13]
-}
-
-df = pd.DataFrame(data)
-
-# Check for at least 1 non-blank value in specified columns
-print(atleast_atmost(df, ['A', 'B', 'C'], at_least=1))
-
-# Check for at most 2 non-blank values in specified columns
-print(atleast_atmost(df, ['A', 'B', 'C'], at_most=2))
-
-# Check for condition value = 3
-print(atleast_atmost(df, ['A', 'B', 'C', 'D'], condition='=3'))
-
-# Check for condition value in [1, 2, 3]
-print(atleast_atmost(df, ['A', 'B', 'C', 'D'], condition='in[1,2,3]'))
-
-# Check for condition value in range [1, 10]
-print(atleast_atmost(df, ['A', 'B', 'C', 'D'], condition='range[1,10]'))
+    valid_mask = DATA.apply(check_row, axis=1)

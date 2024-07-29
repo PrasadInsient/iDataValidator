@@ -1,4 +1,6 @@
 import argparse
+import datetime
+import os
 
 import pandas as pd
 from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL,DATA_MAP_PATH
@@ -17,16 +19,45 @@ def parse_args():
 
 def main():
     args = parse_args()
-    if args.command == "gen":
-        print("Starting the file generation process")
+    runtype="FULLRUN"
+    if not os.path.exists(DATA_PATH):
+        runtype="GENERATE"
+    else:
+        current_time = datetime.datetime.now()
+        file_mod_time = datetime.datetime.fromtimestamp(os.path.getmtime(DATA_PATH))
+        time_diff = current_time - file_mod_time
+        if time_diff.total_seconds() <= 3600:
+            runtype="VALIDATEONLY"
+    if args =="FULLRUN":
+        runtype="FULLRUN"
+    
+    if runtype=="GENERATE":
+        print("GENERATE MODE....")
         fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
         fetch_data(DATA_URL,HEADERS,DATA_PATH)
         generate_columns(DATA_MAP_PATH,DATA_PATH)
         generate_questions(DATA_MAP_PATH,DATA_PATH)
         generate_questions_validator(DATA_MAP_PATH)
         generate_data_objects(DATA_PATH)
-    elif args.command == "all":
-        print("Running validation by generation and downloading all files...")
+
+    if runtype=="VALIDATEONLY":
+        print(f"VALIDATEONLY MODE .. Running validation on existing data downlaoded at {file_mod_time}")
+        
+        print("Starting question validator...")
+        question_validator()
+        print("Finished question validator...")
+        
+        print("Starting unit validator...")
+        unit_validator()
+        print("Finished unit validator...")
+        
+        print("Starting record validator...")
+        record_validator()
+        print("Finished record validator...")
+
+    if runtype=="FULLRUN":
+        print(f"FULLRUN MODE ...")
+        
         fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
         fetch_data(DATA_URL,HEADERS,DATA_PATH)
         generate_columns(DATA_MAP_PATH,DATA_PATH)
@@ -44,21 +75,7 @@ def main():
         print("Starting record validator...")
         record_validator()
         print("Finished record validator...")
-    else:
-        print("Running validation on exisiintg data and existing files...")
-        
-        print("Starting question validator...")
-        question_validator()
-        print("Finished question validator...")
-        
-        print("Starting unit validator...")
-        unit_validator()
-        print("Finished unit validator...")
-        
-        print("Starting record validator...")
-        record_validator()
-        print("Finished record validator...")
-    
+ 
     geterrors()
 
 if __name__ == "__main__":
