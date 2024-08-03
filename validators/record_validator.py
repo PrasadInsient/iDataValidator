@@ -6,5 +6,9 @@ import re
 from validator_functions import *
 import numpy as np
 
-def record_validator():
+
+def validate_row(row):
     pass
+
+def record_validator():
+    df = DATA.apply(lambda row : validate_row(row),axis=1) #type:ignore

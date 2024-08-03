@@ -4,4 +4,5 @@ import pandas as pd
 from logs import *
 
 def geterrors():
-    print(ErrorLog)
+    for error in ErrorLog:
+        print(error.record,error.err_reason,error.errorcolumn,error.errorvalue)

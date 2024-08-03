@@ -26,7 +26,7 @@ def check_for_blanks(cols_to_check):
     def check_row(row):
         for col in cols_to_check:
             value = row[col]
-            if pd.isna(value) or (isinstance(value, str) and len(value.strip()) == 0):
+            if not pd.isna(value) and not (isinstance(value, str) and len(value.strip()) == 0):
                 adderror(row['record'], col, row[col], f"Column {col} is blank")
         return True  # Return True to satisfy the return type expected by apply
 

@@ -3,7 +3,7 @@ import datetime
 import os
 
 import pandas as pd
-from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL,DATA_MAP_PATH
+from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL,DATA_MAP_PATH,METHOD
 from generation.fetch_data import fetch_data
 from generation.fetch_data_map import fetch_data_map
 from survey_model.questions import Questions
@@ -13,14 +13,14 @@ from validators import *
 from logs import geterrors
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Script to check if the first argument is 'gen'.")
-    parser.add_argument("command", help="The command to process, should be 'gen'.")
+    parser = argparse.ArgumentParser(description="Run type script.")
+    parser.add_argument('--type', '-o', help="An optional argument for the script.", default=None)
     return parser.parse_args()
 
 def main():
     args = parse_args()
     runtype="FULLRUN"
-    if not os.path.exists(DATA_PATH):
+    if not os.path.exists(DATA_PATH) or args.type =="GENERATE":
         runtype="GENERATE"
     else:
         current_time = datetime.datetime.now()
@@ -28,49 +28,62 @@ def main():
         time_diff = current_time - file_mod_time
         if time_diff.total_seconds() <= 3600:
             runtype="VALIDATEONLY"
-    if args =="FULLRUN":
+    if args.type =="FULLRUN":
         runtype="FULLRUN"
     
     if runtype=="GENERATE":
-        print("GENERATE MODE....")
-        fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
-        fetch_data(DATA_URL,HEADERS,DATA_PATH)
-        generate_columns(DATA_MAP_PATH,DATA_PATH)
-        generate_questions(DATA_MAP_PATH,DATA_PATH)
-        generate_questions_validator(DATA_MAP_PATH)
-        generate_data_objects(DATA_PATH)
+        print("*****GENERATE MODE*****\n")
+        flag=True
+        if METHOD=="API":
+            flag = fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
+            if flag:
+                print("Data Map fetched...")
+                flag = fetch_data(DATA_URL,HEADERS,DATA_PATH)
+                if flag:
+                    print("Data fetched...")
+                else:
+                    print("Data fetch failed")
+            else:
+                print("Data Map fetch failed")
+        if flag:
+            generate_columns(DATA_MAP_PATH,DATA_PATH)
+            generate_questions(DATA_MAP_PATH,DATA_PATH)
+            generate_questions_validator(DATA_MAP_PATH)
+            generate_data_objects(DATA_PATH)
 
     if runtype=="VALIDATEONLY":
-        print(f"VALIDATEONLY MODE .. Running validation on existing data downlaoded at {file_mod_time}")
+        print(f"*****VALIDATEONLY MODE*****\nRunning validation on existing data downlaoded at {file_mod_time}\n")
         
         print("Starting question validator...")
         question_validator()
         print("Finished question validator...")
-        
-        print("Starting unit validator...")
-        unit_validator()
-        print("Finished unit validator...")
         
         print("Starting record validator...")
         record_validator()
         print("Finished record validator...")
 
     if runtype=="FULLRUN":
-        print(f"FULLRUN MODE ...")
-        
-        fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
-        fetch_data(DATA_URL,HEADERS,DATA_PATH)
-        generate_columns(DATA_MAP_PATH,DATA_PATH)
-        generate_questions(DATA_MAP_PATH,DATA_PATH)
-        generate_data_objects(DATA_PATH)
-
+        print(f"*****FULLRUN MODE*****\n")
+        flag=True
+        if METHOD=="API":
+            flag = fetch_data_map(DATA_MAP_URL,HEADERS,DATA_MAP_PATH)
+            if flag:
+                print("Data Map fetched...")
+                flag = fetch_data(DATA_URL,HEADERS,DATA_PATH)
+                if flag:
+                    print("Data fetched...")
+                else:
+                    print("Data fetch failed")
+            else:
+                print("Data Map fetch failed")
+        if flag:
+            generate_columns(DATA_MAP_PATH,DATA_PATH)
+            generate_questions(DATA_MAP_PATH,DATA_PATH)
+            generate_data_objects(DATA_PATH)
+            
         print("Starting question validator...")
         question_validator()
         print("Finished question validator...")
-        
-        print("Starting unit validator...")
-        unit_validator()
-        print("Finished unit validator...")
         
         print("Starting record validator...")
         record_validator()

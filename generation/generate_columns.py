@@ -1,7 +1,7 @@
 import json
 from utils import GetColumns
 
-def generate_columns(DATA_MAP_PATH,DATA_PATH):
+def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
     with open(DATA_MAP_PATH, 'r') as file:
         data_map = json.load(file)
     
@@ -24,8 +24,10 @@ def generate_columns(DATA_MAP_PATH,DATA_PATH):
             f.write("        pass\n")
             f.write("\n")
             print(f"Columns file '{survey_file}' generated successfully.")
+            return True
         except:
             print("Error in Columns Generation")
+            return False
 
     
     

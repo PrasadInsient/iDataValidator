@@ -44,6 +44,9 @@ def checksum(question:Question, range_type='static', range_value=None, exclude_c
         if not isinstance(range_value, tuple) or len(range_value) != 2:
             raise ValueError(f"For 'static' range_type, range_value must be a tuple (min, max) for checksum - {question.id}.")
         min_range, max_range = range_value
+        min_range = [min_range] * len(column_sum)
+        max_range = [max_range] * len(column_sum)
+
 
     elif range_type == 'column':
         if not isinstance(range_value, str) or range_value not in DATA.columns:

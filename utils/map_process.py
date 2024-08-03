@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import Any, Dict, List
 import xml.etree.ElementTree as ET
     
-def GetQuestions(jsonObj):
+def GetQuestions(jsonObj:Any)->List[Dict[str, str]]:
     questionsMap = []
     for q in jsonObj['variables']:
         if not q['qlabel']:
@@ -18,10 +19,7 @@ def GetQuestions(jsonObj):
     for q in jsonObj['questions']:
         questionObj = {}
         type = q['type']
-        
-        if type == 'single':
-            type="multiple"
-
+        subtype=type
         if type == 'single':
             if 'variables' in q:
                 varcnt =0
@@ -29,13 +27,13 @@ def GetQuestions(jsonObj):
                     if var['type']=="single":
                         varcnt=varcnt+1
                 if varcnt > 1:
-                    type = 'singlegrid'
+                    subtype = 'grid'
 
         if type == 'text':
             if 'variables' in q:
-                #print (q['qlabel'],q['variables'])
                 if len(q['variables']) > 1:
-                    type = 'textlist'
+                    subtype = 'textlist'
+
 
         if type == 'number':
             if 'variables' in q:
@@ -44,20 +42,22 @@ def GetQuestions(jsonObj):
                     if var['type']=="number":
                         varcnt=varcnt+1
                 if varcnt > 1:
-                    type = 'numericlist'
+                    subtype = 'numberlist'
 
         if type == 'float':
             type = 'number'
+            subtype = 'number'
             if 'variables' in q:
                 varcnt =0
                 for var in q['variables']:
                     if var['type']=="float":
                         varcnt=varcnt+1
                 if varcnt > 1:
-                    type = 'numericlist'
+                    subtype = 'numberlist'
 
         questionObj = {}
         questionObj['qtype'] = type
+        questionObj['subtype'] = subtype
         questionObj['qlabel'] = q['qlabel']
         questionObj['qtitle'] = q['qtitle']
         rows = []
@@ -65,21 +65,20 @@ def GetQuestions(jsonObj):
         dataColumnsNames = []
 
         if 'variables' in q:
-            if type == 'single':
+            if subtype == 'single':
                 rows = q['values']
                 dataColumnsNames.append(q['qlabel'])
 
-            if type == 'singlegrid':
+            if subtype == 'grid':
                 cols = q['values']
                 for var in q['variables']:
                     rows.append({'label': var['row'], 'title': var['rowTitle'], 'value': None})
                     dataColumnsNames.append(var['label'])
 
-            if type in ['text','number','float']:
+            if subtype in ['text','number','float']:
                 dataColumnsNames.append(q['qlabel'])
 
-            if type in ['textlist','numberlist','floatlist']:
-                dataColumnsNames.append(q['qlabel'])
+            if subtype in ['textlist','numberlist','floatlist']:
                 for var in q['variables']:
                     rows.append({'label': var['row'], 'title': var['rowTitle'], 'value': None})
                     dataColumnsNames.append(var['label'])
@@ -92,7 +91,7 @@ def GetQuestions(jsonObj):
     return questionsMap
 
 
-def GetColumns(jsonObj):
+def GetColumns(jsonObj:Any)->List[Dict[str, str]]:
     questionsMap = []
     for q in jsonObj['variables']:
         questionObj = {}

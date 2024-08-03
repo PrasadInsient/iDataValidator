@@ -6,6 +6,8 @@ def generate_questions(DATA_MAP_PATH,DATA_PATH):
         data_map = json.load(file)
 
     questions = GetQuestions(data_map)
+    if len(questions)==0:
+         return False
 
     survey_file = 'survey_model/questions.py'
     
