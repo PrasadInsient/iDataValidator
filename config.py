@@ -1,8 +1,8 @@
 import os
 
-API_KEY="w72s7deuhzqb186ew09x8zmg9a68dwqr6qbcmyj4je93kxuu2ydjpgf55kruuvwg"
+API_KEY=""
 SERVER="selfserve.decipherinc.com"
-PATH="selfserve/21a7/240753"
+PATH=""
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -3,7 +3,7 @@ from utils import GetColumns
 
 def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
     DATA_PATH = DATA_PATH.replace("\\","\\\\")
-    with open(DATA_MAP_PATH, 'r') as file:
+    with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
         data_map = json.load(file)
     
     columns = GetColumns(data_map)
