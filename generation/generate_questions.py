@@ -1,7 +1,8 @@
 import json
 from utils import GetQuestions
 
-def generate_questions(DATA_MAP_PATH,DATA_PATH):
+def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
+    DATA_PATH = DATA_PATH.replace("\\","\\\\")
     with open(DATA_MAP_PATH, 'r') as file:
         data_map = json.load(file)
 
@@ -20,7 +21,7 @@ def generate_questions(DATA_MAP_PATH,DATA_PATH):
             f.write("import pandas as pd\n")
             f.write("class Questions:\n")
             f.write("    def __init__(self):\n")
-            f.write(f"        self.data = pd.read_excel('{DATA_PATH}')\n")
+            f.write(f"        self.data = pd.read_excel(r'{DATA_PATH}')\n")
             for question in questions:
                 qid = question['qlabel']
                 qtype = question['qtype']

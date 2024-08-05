@@ -4,4 +4,3 @@ import pandas as pd
 class Columns:
     def __init__(self):
         pass
-

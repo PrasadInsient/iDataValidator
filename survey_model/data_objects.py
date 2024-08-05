@@ -14,7 +14,7 @@ def convert_column(column):
     except ValueError:
         return column
 
-DATA:pd.DataFrame= pd.DataFrame()
+DATA = pd.DataFrame()
 
 for column in DATA.columns:
     DATA[column] = convert_column(DATA[column])

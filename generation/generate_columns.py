@@ -2,6 +2,7 @@ import json
 from utils import GetColumns
 
 def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
+    DATA_PATH = DATA_PATH.replace("\\","\\\\")
     with open(DATA_MAP_PATH, 'r') as file:
         data_map = json.load(file)
     
@@ -16,7 +17,7 @@ def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
         try:
             f.write("class Columns:\n")
             f.write("    def __init__(self):\n")
-            f.write(f"        self.data = pd.read_excel('{DATA_PATH}')\n")
+            f.write(f"        self.data = pd.read_excel(r'{DATA_PATH}')\n")
             for column in columns:
                 label = column['label']
                 ctype = column['type']

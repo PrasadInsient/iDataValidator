@@ -67,7 +67,7 @@ def GetQuestions(jsonObj:Any)->List[Dict[str, str]]:
         if 'variables' in q:
             if subtype == 'single':
                 rows = q['values']
-                dataColumnsNames.append(q['qlabel'])
+                dataColumnsNames.append(q['label'])
 
             if subtype == 'grid':
                 cols = q['values']
