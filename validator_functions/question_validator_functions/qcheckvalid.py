@@ -8,7 +8,7 @@ from typing import List, Union, Callable, Optional, Tuple
 # Define a type alias for range tuples
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
-def validate_exclusivity(question, data, exclusive):
+def qvalidate_exclusivity(question, data, exclusive):
     for excl_column in exclusive:
         if excl_column in data.columns:
             exclusivity_condition_active = (data[excl_column] != 0) & (~data[excl_column].isna())
@@ -19,7 +19,7 @@ def validate_exclusivity(question, data, exclusive):
                 for index in invalid_rows.index:
                     adderror(data.at[index, 'record'], column, data.at[index, column], f'Exclusivity violated by {excl_column} being active')
 
-def validate_single_multiple(question, data, valid_values, optional_cols, at_least, at_most):
+def qvalidate_single_multiple(question, data, valid_values, optional_cols, at_least, at_most):
     for column in question.datacols:
         if column in data.columns:
             if callable(valid_values):
@@ -37,13 +37,13 @@ def validate_single_multiple(question, data, valid_values, optional_cols, at_lea
                 adderror(data.at[index, 'record'], column, data.at[index, column], 'Invalid Value')
 
     for index, row in data.iterrows():
-        num_selected = row[question.datacols].count()
+        num_selected = row[question.datacols].apply(lambda x: pd.notna(x) and x > 0).sum()
         if num_selected < at_least:
             adderror(row['record'], question.id, "", f"Fewer than {at_least} selections made.")
         if num_selected > at_most:
             adderror(row['record'], question.id, "", f"More than {at_most} selections made.")
 
-def validate_number(question, data, range_param, allow_blanks, optional_cols):
+def qvalidate_number(question, data, range_param, allow_blanks, optional_cols):
     for column in question.datacols:
         if column in data.columns:
             if callable(range_param):
@@ -67,7 +67,7 @@ def validate_number(question, data, range_param, allow_blanks, optional_cols):
                     
                     adderror(data.at[index, 'record'], column, error_value, error_message)
 
-def validate_text(question, data, txt_min_length, txt_max_length, optional_cols):
+def qvalidate_text(question, data, txt_min_length, txt_max_length, optional_cols):
     for column in question.datacols:
         if column in data.columns and (txt_min_length is not None or txt_max_length is not None):
             for index, value in data[column].iteritems():
@@ -84,7 +84,7 @@ def validate_text(question, data, txt_min_length, txt_max_length, optional_cols)
                    (txt_max_length is not None and len(cleaned_text) > txt_max_length):
                     adderror(data.at[index, 'record'], column, value, f'Text length violation (cleaned length {len(cleaned_text)})')
 
-def validate_completeness(question, data, required, at_least, at_most):
+def qvalidate_completeness(question, data, required, at_least, at_most):
     if required == 1:
         for index, row in data.iterrows():
             non_blank_responses = row[question.datacols].apply(lambda x: pd.notna(x) and x != 0 and x != '').sum()
@@ -94,7 +94,7 @@ def validate_completeness(question, data, required, at_least, at_most):
             if non_blank_responses > at_most:
                 adderror(data.at[index, 'record'], question.id, "", f"More than {at_most} valid responses found.")
 
-def check_valid(
+def qcheck_valid(
     question: Question,
     qtype: str = 'single',
     valid_values: Union[List, Callable, np.ndarray] = [0, 1],
@@ -109,7 +109,8 @@ def check_valid(
     txt_min_length: Optional[int] = None,
     txt_max_length: Optional[int] = None,
     custom_row_validation: Optional[Callable] = None,
-    condition: Optional[Callable] = None
+    condition: Optional[Callable] = None,
+    skip_check_blank=True
 ):
     """
     Validate data based on question type, value range, exclusivity, completeness, text length requirements, and custom validation.
@@ -136,7 +137,7 @@ def check_valid(
     Usage examples:
     
     # Define a custom row validation function
-    def custom_row_validation_function(row):
+    def qcustom_row_validation_function(row):
         # Custom validation logic
         for column in row.index:
             if column != 'record' and row[column] % 2 != 0:
@@ -162,21 +163,22 @@ def check_valid(
     filtered_data = DATA[DATA.apply(condition, axis=1)]
     
     # Check for invalid data in rows that do not meet the condition
-    for index, row in DATA[~DATA.apply(condition, axis=1)].iterrows():
-        for column in question.datacols:
-            if pd.notna(row[column]):
-                adderror(row['record'], column, row[column], f'Invalid data due to condition failure for {column}')
+    if skip_check_blank:
+        for index, row in DATA[~DATA.apply(condition, axis=1)].iterrows():
+            for column in question.datacols:
+                if pd.notna(row[column]):
+                    adderror(row['record'], column, row[column], f'Invalid data due to condition failure for {column}')
 
-    validate_exclusivity(question, filtered_data, exclusive)
+    qvalidate_exclusivity(question, filtered_data, exclusive)
     
     if question.type in ['single', 'multiple']:
-        validate_single_multiple(question, filtered_data, valid_values, optional_cols, at_least, at_most)
+        qvalidate_single_multiple(question, filtered_data, valid_values, optional_cols, at_least, at_most)
     elif question.type == 'number':
-        validate_number(question, filtered_data, range_value, allow_blanks, optional_cols)
+        qvalidate_number(question, filtered_data, range_value, allow_blanks, optional_cols)
     elif question.type == 'text':
-        validate_text(question, filtered_data, txt_min_length, txt_max_length, optional_cols)
+        qvalidate_text(question, filtered_data, txt_min_length, txt_max_length, optional_cols)
 
-    validate_completeness(question, filtered_data, required, at_least, at_most)
+    qvalidate_completeness(question, filtered_data, required, at_least, at_most)
 
     # Apply custom row validation to filtered data
     if custom_row_validation is not None:
@@ -184,7 +186,7 @@ def check_valid(
 
 '''   
 # Example usage of check_valid function
-def example_usage():
+def qexample_usage():
     # Single choice validation
     check_valid(
         questions['Q1'],
@@ -194,7 +196,7 @@ def example_usage():
     )
 
     # Multiple choice validation
-    check_valid(
+    qcheck_valid(
         questions['Q2'],
         qtype=QUESTIONTYPES.MULTIPLE,
         valid_values=[0, 1],  # Valid values for each choice
@@ -204,7 +206,7 @@ def example_usage():
     )
 
     # Numeric validation with static range
-    check_valid(
+    qcheck_valid(
         questions['Q3'],
         qtype=QUESTIONTYPES.NUMBER,
         range_param=(10, 100),  # Static range from 10 to 100
@@ -213,7 +215,7 @@ def example_usage():
     )
 
     # Numeric validation with dynamic range
-    check_valid(
+    qcheck_valid(
         questions['Q3'],
         qtype=QUESTIONTYPES.NUMBER,
         range_param=lambda row: (0, float(row['Q1']) * 10),  # Dynamic range based on Q1
@@ -222,7 +224,7 @@ def example_usage():
     )
 
     # Text validation
-    check_valid(
+    qcheck_valid(
         questions['Q4'],
         qtype=QUESTIONTYPES.TEXT,
         txt_min_length=5,  # Minimum text length

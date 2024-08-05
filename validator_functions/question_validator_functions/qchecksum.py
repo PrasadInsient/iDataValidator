@@ -3,7 +3,7 @@ from logs import adderror
 import pandas as pd
 import numpy as np
 
-def checksum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
+def qchecksum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
     """
     Check if the sum of specified columns in a DataFrame falls within a given range.
 
@@ -47,7 +47,6 @@ def checksum(question:Question, range_type='static', range_value=None, exclude_c
         min_range = [min_range] * len(column_sum)
         max_range = [max_range] * len(column_sum)
 
-
     elif range_type == 'column':
         if not isinstance(range_value, str) or range_value not in DATA.columns:
             raise ValueError(f"For 'column' range_type, range_value must be a valid column name for checksum - {question.id}.")
@@ -63,6 +62,3 @@ def checksum(question:Question, range_type='static', range_value=None, exclude_c
         if not (min_val <= sum_val <= max_val):
             record =DATA.at[index, 'record']
             adderror(record, question.id, sum_val, f"Sum {sum_val} out of range ({min_val}, {max_val})")
-
-def checksum100(question:Question, exclude_cols=[]):
-    checksum(question, range_type='static', range_value=(1,100), exclude_cols=[])

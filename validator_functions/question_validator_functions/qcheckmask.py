@@ -7,7 +7,7 @@ from logs import Error, ErrorLog,adderror
 
 import pandas as pd
 
-def checkmask(question_cols: List[str], maskcond_cols: List[str], condition: str, always_showcols: List[str]):
+def qcheckmask(question_cols: List[str], maskcond_cols: List[str], condition: str, always_showcols: List[str]):
     """
     Check if specified columns contain values that meet a specific condition and log errors.
 
@@ -42,6 +42,8 @@ def checkmask(question_cols: List[str], maskcond_cols: List[str], condition: str
     def check_row(row):
         for q_col, m_col in zip(question_cols, maskcond_cols):
             if not pd.isna(row[q_col]) and not condition_check.loc[row.name, m_col]:
+                adderror(row['record'], q_col, row[q_col], f"Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
+            if pd.isna(row[q_col]) and condition_check.loc[row.name, m_col]:
                 adderror(row['record'], q_col, row[q_col], f"Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
         
         for col in always_showcols:
