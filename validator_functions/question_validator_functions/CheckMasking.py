@@ -7,7 +7,7 @@ from logs import Error, ErrorLog,adderror
 
 import pandas as pd
 
-def qcheckmask(question_cols: List[str], maskcond_cols: List[str], condition: str, always_showcols: List[str]):
+def CheckMasking(question_cols: List[str], maskcond_cols: List[str], condition: str, always_showcols: List[str]):
     """
     Check if specified columns contain values that meet a specific condition and log errors.
 

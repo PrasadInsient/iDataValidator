@@ -3,7 +3,7 @@ from logs import adderror
 import pandas as pd
 import numpy as np
 
-def qchecksum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
+def checkSum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
     """
     Check if the sum of specified columns in a DataFrame falls within a given range.
 

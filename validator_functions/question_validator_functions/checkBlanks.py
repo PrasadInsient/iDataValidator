@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import re
 
-def qcheck_for_nonblanks(cols_to_check:Union[List, Question],condition: Optional[Callable] = None):
+def checkBlanks(cols_to_check:Union[List, Question],condition: Optional[Callable] = None):
     """
     Check if specified columns contain blank (NaN) values.
 
@@ -36,8 +36,8 @@ def qcheck_for_nonblanks(cols_to_check:Union[List, Question],condition: Optional
     def check_row(row):
         for col in xcols_to_check:
             value = row[col]
-            if pd.isna(value):
-                adderror(row['record'], col, row[col], f"Column {col} is blank")
+            if not pd.isna(value):
+                adderror(row['record'], col, row[col], f"Column {col} is not blank")
         return True  # Return True to satisfy the return type expected by apply
 
 

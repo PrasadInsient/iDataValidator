@@ -7,7 +7,7 @@ import pandas as pd
 
 from typing import List, Optional, Any
 
-def qcheck_condition(value: Any, source_value: Optional[Any] = None, condition: Optional[str]="=1") -> bool:
+def checkCondition(value: Any, source_value: Optional[Any] = None, condition: Optional[str]="=1") -> bool:
     """
     Check if a value meets the specified condition.
 
@@ -42,4 +42,5 @@ def qcheck_condition(value: Any, source_value: Optional[Any] = None, condition: 
             return False
     else:
         raise ValueError("Invalid condition. Supported conditions are '=', 'in', 'range'.")
+    filtered_data = DATA[DATA.apply(condition, axis=1)]
 

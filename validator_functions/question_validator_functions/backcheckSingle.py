@@ -44,7 +44,7 @@ def check_condition(value, condition):
         return value <= int(condition[2:])
     return False
 
-def backcheck_single( question: Question, cols_to_check: List[str], condition: Optional[str] = None):
+def backcheckSingle( question: Question, cols_to_check: List[str], condition: Optional[str] = None):
     """
     Check if the value in cols_to_check[source-1] satisfies the condition based on the source column value.
 

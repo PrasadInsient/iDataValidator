@@ -1,16 +1,12 @@
-from typing import Callable, List, Optional, Tuple, Union
+from typing import Callable, List, Optional, Union
 from survey_model import DATA, COLUMNS, QUESTIONS, Column, Columns, Question, Questions 
 from logs import adderror
 
 import pandas as pd
 import numpy as np
 import re
-RangeTuple = Tuple[Union[int, float], Union[int, float]]
-def qcheck_for_nonblanks(
-        cols_to_check:Union[List, Question],
-        condition: Optional[Callable] = None,
-        valid_values: Union[List, Callable, np.ndarray] = [0, 1],
-        allow_blanks: bool = False,):
+
+def checkNonBlanks(cols_to_check:Union[List, Question],condition: Optional[Callable] = None):
     """
     Check if specified columns contain blank (NaN) values.
 
@@ -40,8 +36,8 @@ def qcheck_for_nonblanks(
     def check_row(row):
         for col in xcols_to_check:
             value = row[col]
-            if pd.isna(value) or value not in valid_values:
-                adderror(row['record'], col, row[col], f"Column {col} value is not matching")
+            if pd.isna(value):
+                adderror(row['record'], col, row[col], f"Non blank check failed")
         return True  # Return True to satisfy the return type expected by apply
 
 

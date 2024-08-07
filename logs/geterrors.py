@@ -13,5 +13,10 @@ def geterrors():
     }
 
     error_df = pd.DataFrame(error_data)
-    grouped_df = error_df.groupby('Reason')['Record'].apply(list).reset_index()
-    print(grouped_df)
+    grouped_df = error_df.groupby(['Reason', 'Column', 'Value']).agg({'Record': ['list', 'count']}).reset_index()
+    grouped_df.columns = ['Reason', 'Column', 'Value', 'Record', 'Count']
+    if len(error_df)>0:
+        print(grouped_df)
+        grouped_df.to_excel("./data/errors.xlsx")
+    else:
+        print("***NO ERRORS***")

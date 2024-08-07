@@ -20,8 +20,7 @@ def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
             f.write(f"        self.data = pd.read_excel(r'{DATA_PATH}')\n")
             for column in columns:
                 label = column['label']
-                ctype = column['type']
-                f.write(f"        self.{label} = Column('{label}', '{ctype}',self.data[['record','{label}']])\n")
+                f.write(f"        self.{label} = '{label}'\n")
             f.write("        pass\n")
             f.write("\n")
             print(f"Columns file '{survey_file}' generated successfully.")

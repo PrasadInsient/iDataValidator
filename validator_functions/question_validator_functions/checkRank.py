@@ -6,7 +6,7 @@ from logs import Error, ErrorLog, adderror
 
 import pandas as pd
 
-def qcheckrank(question:Question, max_rank_type='static', max_rank_value=None, exclude_cols=[]):
+def checkRank(question:Question, max_rank_type='static', max_rank_value=None, exclude_cols=[]):
     """
     Check for unique values across specified columns in a DataFrame, ensuring each value is present only once
     and falls within the specified dynamic rank range (min_rank = 1).
