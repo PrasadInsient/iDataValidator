@@ -21,8 +21,8 @@ def checkBlanks(cols_to_check:Union[List, Question],condition: Optional[Callable
     check_for_blanks('A'))
     check_for_blanks(['A','B']))
     """
-    if isinstance(cols_to_check, str):
-        xcols_to_check = [cols_to_check]
+    if isinstance(cols_to_check, List):
+        xcols_to_check = cols_to_check
 
     if isinstance(cols_to_check, Question):
         xcols_to_check = cols_to_check.datacols
