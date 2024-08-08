@@ -8,8 +8,8 @@ from logs import adderror
 # Define a type alias for range tuples
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
-def qvalidate_exclusivity(datacols, data, exclusive):
-    for excl_column in exclusive:
+def qvalidate_exclusivity(datacols, data, exclusive_cols):
+    for excl_column in exclusive_cols:
         exclusivity_condition_active = (data[excl_column] != 0) & (~data[excl_column].isna())
         other_columns = [col for col in datacols if col != excl_column and col in data.columns]
 
@@ -91,10 +91,8 @@ def qvalidate_text(datacols, data, txt_min_length, txt_max_length, optional_cols
                 (txt_max_length is not None and len(cleaned_text) > txt_max_length):
                 adderror(data.at[index, 'record'], column, value, f'Text length check failed - {len(cleaned_text)} chars')
 
-def qvalidate_completeness(questionid, datacols, exclusive_cols, data, required, at_least, at_most):
+def qvalidate_completeness(questionid, datacols, data, required, at_least, at_most):
     if required == 1:
-        for col in exclusive_cols:
-            if col not in datacols: datacols.append(col)
         # Define the condition for non-blank responses
         non_blank_condition = lambda x: pd.notna(x) and x != 0 and x != ''
 
@@ -139,6 +137,9 @@ def ValidateColumns(
     
     datacols = [col for col in srcdatacols if col not in exclude_cols]
 
+    for col in exclusive_cols:
+        if col not in datacols: datacols.append(col)
+
     # Check for invalid data in rows that do not meet the condition
     if not skip_check_blank:
         for index, row in DATA[~DATA.apply(condition, axis=1)].iterrows():
@@ -155,7 +156,7 @@ def ValidateColumns(
     elif columns_type == 'text':
         qvalidate_text(datacols, filtered_data, txt_min_length, txt_max_length, optional_cols)
 
-    qvalidate_completeness(question_id, datacols, filtered_data, required, at_least, at_most,exclusive_cols)
+    qvalidate_completeness(question_id, datacols, filtered_data, required, at_least, at_most)
 
     # Apply custom row validation to filtered data
     if custom_row_validation is not None:
