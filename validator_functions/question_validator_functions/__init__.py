@@ -2,7 +2,7 @@ from .validateQuestion import validateQuestion
 from .validateColumns import ValidateColumns
 from .checkInvalid import checkInvalid
 from .checkBlanks import checkBlanks
-from .checkLogic import checkLogic
+from .checkLogic import checkInvalidLogic, checkValidLogic
 from .CheckMasking import CheckMasking
 from .checkNonBlanks import checkNonBlanks
 from .checkQuestionMasking import checkQuestionMasking

@@ -77,7 +77,7 @@ def qvalidate_number(datacols, data, range_param, allowblanks, optional_cols):
 
 def qvalidate_text(datacols, data, txt_min_length, txt_max_length, optional_cols):
     for column in datacols:
-        for index, value in data[column].iteritems():
+        for index, value in data[column].items():
             if pd.isna(value):
                 if column in optional_cols:
                     continue
