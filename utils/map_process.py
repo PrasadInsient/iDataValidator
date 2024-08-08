@@ -72,9 +72,9 @@ def GetQuestions(jsonObj:Any)->List[Dict[str, str]]:
                         dataColumnsNames.append(var['label'])
 
             if subtype == 'multiple':
-                rows = q['values']
                 for var in q['variables']:
                     if var['type']=='multiple':
+                        rows.append({'label': var['row'], 'title': var['rowTitle'], 'value': None})
                         dataColumnsNames.append(var['label'])
 
             if subtype == 'grid':
@@ -97,7 +97,10 @@ def GetQuestions(jsonObj:Any)->List[Dict[str, str]]:
 
             if subtype in ['text']:
                 for var in q['variables']:
-                    dataColumnsNames.append(q['label'])
+                    if 'label' in q:
+                        dataColumnsNames.append(q['label'])
+                    elif 'qlabel' in q:
+                        dataColumnsNames.append(q['qlabel'])
 
             if subtype in ['textlist']:
                 for var in q['variables']:

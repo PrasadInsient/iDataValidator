@@ -39,9 +39,9 @@ def generate_questions_validator(DATA_MAP_PATH):
                     match = re.match(pattern, qid)
                     if match:
                         f.write(f"  #{qid}\n  qxcustom_validator = partial(qx_validator, loopid=f'{match.group(2)}{{loopid}}')\n\n")
-                        f.write(f"  #{qid}\n  qcheck_valid(eval(f'QUESTIONS.{match.group(1)}_{match.group(2)}{{loopid}}'),qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 1), exclusive=[],allow_blanks=False,skip_check_blank=True,\n             condition =lambda row,loopid: True,range_value=(0,100))\n\n")
+                        f.write(f"  #{qid}\n  validateQuestion(eval(f'QUESTIONS.{match.group(1)}_{match.group(2)}{{loopid}}'),qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row,loopid: True,range_value=(0,100))\n\n")
                     else:    
-                        f.write(f"  #{qid}\n  qcheck_valid(QUESTIONS.{qid},qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 1), exclusive=[],allow_blanks=False,skip_check_blank=True,\n             condition =lambda row: True,range_value=(0,100))\n\n")
+                        f.write(f"  #{qid}\n  validateQuestion(QUESTIONS.{qid},qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row: True,range_value=(0,100))\n\n")
                 f.write(f"'''\n\n")
             print(f"Questions validation file '{question_validator_file}' generated successfully.")
             return True

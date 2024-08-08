@@ -61,6 +61,7 @@ def main():
         print("Starting record validator...")
         record_validator()
         print("Finished record validator...")
+        geterrors()
 
     if runtype=="FULLRUN":
         print(f"*****FULLRUN MODE*****\n")
@@ -88,8 +89,9 @@ def main():
         print("Starting record validator...")
         record_validator()
         print("Finished record validator...")
+        geterrors()
  
-    geterrors()
+    
 
 if __name__ == "__main__":
     main()

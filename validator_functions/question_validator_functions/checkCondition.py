@@ -42,5 +42,6 @@ def checkCondition(value: Any, source_value: Optional[Any] = None, condition: Op
             return False
     else:
         raise ValueError("Invalid condition. Supported conditions are '=', 'in', 'range'.")
+    
     filtered_data = DATA[DATA.apply(condition, axis=1)]
 

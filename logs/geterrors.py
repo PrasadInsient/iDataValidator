@@ -4,7 +4,7 @@ import pandas as pd
 from logs import *
 
 def geterrors():
-        # Convert ErrorLog to a DataFrame
+    # Convert ErrorLog to a DataFrame
     error_data = {
         "Record": [error.record for error in ErrorLog],
         "Column": [error.errorcolumn for error in ErrorLog],
@@ -13,10 +13,14 @@ def geterrors():
     }
 
     error_df = pd.DataFrame(error_data)
-    grouped_df = error_df.groupby(['Reason', 'Column', 'Value']).agg({'Record': ['list', 'count']}).reset_index()
-    grouped_df.columns = ['Reason', 'Column', 'Value', 'Record', 'Count']
-    if len(error_df)>0:
+
+    if len(error_df) > 0:
+        grouped_df = error_df.groupby(['Reason', 'Column', 'Value']).agg(
+            Record=('Record', list),
+            Count=('Record', 'count')
+        ).reset_index()
+        
         print(grouped_df)
-        grouped_df.to_excel("./data/errors.xlsx")
+        grouped_df.to_excel("./data/errors.xlsx", index=False)
     else:
         print("***NO ERRORS***")
