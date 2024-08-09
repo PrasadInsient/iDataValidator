@@ -19,6 +19,11 @@ def generate_questions_validator(DATA_MAP_PATH):
         
         if check_file(question_validator_file):
             with open(question_validator_file, 'w') as f:
+                f.write("import sys\n")
+                f.write("import os\n")
+                f.write("current_dir = os.path.dirname(os.path.abspath(__file__))\n")
+                f.write("parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))\n")
+                f.write("sys.path.insert(0, parent_dir)\n")
                 f.write("from survey_model import DATA, COLUMNS, QUESTIONS, QUESTIONTYPES, Column, Columns, Question, Questions\n")
                 f.write("from typing import List\n")
                 f.write("import pandas as pd\n")
