@@ -31,8 +31,9 @@ def generate_questions_validator(DATA_MAP_PATH):
                 f.write("import re\n")
                 f.write("from validator_functions.question_validator_functions import *\n")
                 f.write("from validator_functions.record_validator_functions import *\n")
-                f.write("from .record_validator import *\n")
-                f.write("from .unit_validators import *\n")
+                f.write("from validators.record_validator import *\n")
+                f.write("from validators.unit_validators import *\n")
+                f.write("from logs import geterrors\n")
                 f.write("from functools import partial\n")
                 
                 f.write("def question_validator():\n")               
@@ -48,6 +49,9 @@ def generate_questions_validator(DATA_MAP_PATH):
                     else:    
                         f.write(f"  #{qid}\n  validateQuestion(QUESTIONS.{qid},qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row: True,range_value=(0,100))\n\n")
                 f.write(f"'''\n\n")
+                f.write('if __name__ == "__main__":\n')
+                f.write('    question_validator()\n')
+                f.write('    geterrors()\n')
             print(f"Questions validation file '{question_validator_file}' generated successfully.")
             return True
     except Exception as e:
