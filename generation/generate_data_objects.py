@@ -11,7 +11,7 @@ def generate_data_objects(DATA_PATH)->bool:
         f.write("from .columns import Columns\n")
         f.write("from .questions import Questions\n")
         f.write("from .questiontypes import QuestionTypes\n\n")
-        
+        f.write("from config import *\n")
         f.write("def convert_column(column):\n")
         f.write("    # Check if the column can be converted to Int64\n")
         f.write("    try:\n")
@@ -24,7 +24,7 @@ def generate_data_objects(DATA_PATH)->bool:
         f.write("        return column\n\n")
         
         try:
-            f.write(f"DATA = pd.read_excel(r'{DATA_PATH}')\n\n")
+            f.write(f"DATA = pd.read_excel(DATA_PATH)\n\n")
             f.write("for column in DATA.columns:\n")
             f.write("    DATA[column] = convert_column(DATA[column])\n\n")
             

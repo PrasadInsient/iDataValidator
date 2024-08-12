@@ -35,6 +35,7 @@ def generate_questions_validator(DATA_MAP_PATH):
                 f.write("from validators.unit_validators import *\n")
                 f.write("from logs import geterrors\n")
                 f.write("from functools import partial\n")
+                f.write("from config import *\n")
                 
                 f.write("def question_validator():\n")               
                 f.write(f"  pass\n  '''")

@@ -1,12 +1,13 @@
 import json
-from utils import GetQuestions
+from utils import GetQuestions, replace_non_ascii
 
 def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
     DATA_PATH = DATA_PATH.replace("\\","\\\\")
     with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
         data_map = json.load(file)
+        data_map_cleaned = replace_non_ascii(data_map)
 
-    questions = GetQuestions(data_map)
+    questions = GetQuestions(data_map_cleaned)
     if len(questions)==0:
          return False
 
@@ -19,9 +20,10 @@ def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
             f.write("from .columns import Columns\n") 
             f.write("from typing import List\n")
             f.write("import pandas as pd\n")
+            f.write("from config import *\n")
             f.write("class Questions:\n")
             f.write("    def __init__(self):\n")
-            f.write(f"        self.data = pd.read_excel(r'{DATA_PATH}')\n")
+            f.write(f"        self.data = pd.read_excel(DATA_PATH)\n")
             for question in questions:
                 qid = question['qlabel']
                 qtype = question['qtype']
