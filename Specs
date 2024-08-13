@@ -1,44 +1,56 @@
-Pyhton Project with below structure
-my_survey_package/
-├── genDV
-│    ├── __init__.py
-│    ├── generate_data.py
-│    ├── generate_SQC.py
-├── data
-│    ├── __init__.py
-│    ├── datamap.json
-│    ├── data.xlsx
-├── Validation Functions
-│    ├── __init__.py
-│    ├── questionfunctions.py
-│    ├── recordsfunctions.py
-├── DVscripts
-│    ├── __init__.py
-│    ├── validateQuestions.py
-│    ├── validateRecords.py
-├── SQC
-│    ├── __init__.py
-│    ├── question.py
-│    ├── survey.py
-├── log
-│    ├── QuestionErrros.txt
-│    ├── RecordErrors.txt
-├── GenDV.py
+iDataValidator/
 ├── run.py
-
-
-genDV folder - generate_data -> Read from API and pull data map and data into data folder
-
-genDV folder - generate_SQC -> Read from data map and generate question.py and Survey.py
-	- Question.py will have class Question
-	- Survey.py will have a class Surevy with all questions from data map. 
-
-Validation Functions
-	- questionfunctions.py - Will have functions to check data in data frame with columns
-	- recordsfunctions.py - Will have functions that check data dataframe by each row
-
-DVscripts
-	- validateQuestions.py - Will call functions in questionfunctions for ecah question in SQC/survey.py 
-	- validateRecords.py - Will call functions in recordsfunctions for ecah question in SQC/survey.py
-
-Log	- Will contain check fail message from 	DVScripts
+├── config.py
+├── Specs
+├── validator_functions/
+│   ├── record_validator_functions/
+    │   └── __init__.py
+    └── question_validator_functions/
+    │   ├── __init__.py
+    │   ├── checkSum100.py
+    │   ├── checkSum.py
+    │   ├── checkBlanks.py
+    │   ├── checkCondition.py
+    │   ├── checkQuestionMasking.py
+    │   ├── checkTerm.py
+    │   ├── backcheckSingle.py
+    │   ├── checkNonBlanks.py
+    │   ├── validateColumns.py
+    │   ├── checkRank.py
+    │   ├── checkInvalid.py
+    │   ├── validateQuestion.py
+    │   ├── checkLogic.py
+        └── CheckMasking.py
+├── utils/
+│   ├── __init__.py
+│   ├── map_process.py
+│   ├── xml_utils.py
+    └── cleanmap.py
+├── logs/
+│   ├── __init__.py
+│   ├── geterrors.py
+│   ├── adderror.py
+    └── errors.py
+├── generate/
+│   ├── __init__.py
+│   ├── generate_columns.py
+│   ├── fetch_data.py
+│   ├── generate_question_validator.py
+│   ├── generate_questions.py
+│   ├── fetch_data_map.py
+    └── generate_data_objects.py
+├── survey_model/
+│   ├── __init__.py
+│   ├── question.py
+│   ├── questions.py
+│   ├── questiontypes.py
+│   ├── columns.py
+│   ├── data_objects.py
+    └── column.py
+├── validators/
+│   ├── __init__.py
+│   ├── quickcheck_validator.py
+│   ├── question_validator.py
+│   ├── unit_validators.py
+    └── record_validator.py
+└── data/

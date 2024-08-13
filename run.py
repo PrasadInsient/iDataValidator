@@ -4,10 +4,10 @@ import os
 
 import pandas as pd
 from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL,DATA_MAP_PATH,METHOD
-from generation.fetch_data import fetch_data
-from generation.fetch_data_map import fetch_data_map
+from generate.fetch_data import fetch_data
+from generate.fetch_data_map import fetch_data_map
 from survey_model.questions import Questions
-from generation import fetch_data, fetch_data_map, generate_columns, generate_questions, generate_data_objects, generate_questions_validator
+from generate import fetch_data, fetch_data_map, generate_columns, generate_questions, generate_data_objects, generate_questions_validator
 from survey_model import DATA, COLUMNS, QUESTIONS, QUESTIONTYPES, Column, Columns, Question, Questions
 from validators import *
 from logs import geterrors
