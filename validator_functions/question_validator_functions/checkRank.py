@@ -1,3 +1,4 @@
+from typing import Callable, Optional
 from survey_model import DATA, COLUMNS, QUESTIONS, Column, Columns, Question, Questions 
 import pandas as pd
 import numpy as np
@@ -6,13 +7,12 @@ from logs import Error, ErrorLog, adderror
 
 import pandas as pd
 
-def checkRank(question:Question, max_rank_type='static', max_rank_value=None, exclude_cols=[]):
+def checkrank(question:Question, max_rank_type='static', max_rank_value=None, exclude_cols=[],condition: Optional[Callable] = None):
     """
-    Check for unique values across specified columns in a DataFrame, ensuring each value is present only once
+    Check for unique values across specified columns in a question, ensuring each value is present only once
     and falls within the specified dynamic rank range (min_rank = 1).
 
     Parameters:
-    df (pd.DataFrame): The DataFrame to check.
     question (object): The question object containing datacols attribute (list of columns to check).
     max_rank_type (str): Type of max rank ('static', 'sum_columns', 'column').
     max_rank_value (int, list, str): Max rank value depending on max_rank_type.
@@ -23,13 +23,13 @@ def checkRank(question:Question, max_rank_type='static', max_rank_value=None, ex
 
     Usage:
     # Check with static max_rank
-    print(checkrank(question, max_rank_type='static', max_rank_value=15))
+    checkrank(question, max_rank_type='static', max_rank_value=15)
 
     # Check with max_rank from another column
-    print(checkrank(question, max_rank_type='column', max_rank_value='MaxRank'))
+    checkrank(question, max_rank_type='column', max_rank_value='MaxRank')
 
     # Check with max_rank as the sum of other columns
-    print(checkrank(question, max_rank_type='sum_columns', max_rank_value=['A', 'B']))
+    checkrank(question, max_rank_type='sum_columns', max_rank_value=['A', 'B'])
 
     # Check with excluding some columns
     print(checkrank(question, max_rank_type='static', max_rank_value=15, exclude_cols=['D']))
@@ -76,5 +76,9 @@ def checkRank(question:Question, max_rank_type='static', max_rank_value=None, ex
             return False
         
         return True
+    if condition is None:
+        condition = lambda x: True
 
-    DATA.apply(lambda row: check_row(row, max_rank.loc[row.name]), axis=1)
+    filtered_data = DATA[DATA.apply(condition, axis=1)]
+
+    filtered_data.apply(lambda row: check_row(row, max_rank.loc[row.name]), axis=1)

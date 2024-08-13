@@ -91,10 +91,12 @@ def qvalidate_text(datacols, data, txt_min_length, txt_max_length, optional_cols
                 (txt_max_length is not None and len(cleaned_text) > txt_max_length):
                 adderror(data.at[index, 'record'], column, value, f'Text length check failed - {len(cleaned_text)} chars')
 
-def qvalidate_completeness(questionid, datacols, data, required, at_least, at_most):
+def qvalidate_completeness(questionid, datacols, data, required, at_least, at_most,columns_type):
     if required == 1:
         # Define the condition for non-blank responses
         non_blank_condition = lambda x: pd.notna(x) and x != 0 and x != ''
+        if columns_type=='number':
+            non_blank_condition = lambda x: pd.notna(x) and x != ''
 
         # Apply the condition across the specified columns and count non-blank responses
         non_blank_counts = data[datacols].apply(lambda col: col.map(non_blank_condition)).sum(axis=1)
@@ -109,7 +111,7 @@ def qvalidate_completeness(questionid, datacols, data, required, at_least, at_mo
         for index in data.index[more_than_max]:
             adderror(data.at[index, 'record'], questionid, "", f"At most responses check failed - {at_least} valid responses found.")
 
-def ValidateColumns(
+def validatecolumns(
     question_id: str = "",
     srcdatacols: List[str] = [],
     columns_type: str = 'single',
@@ -129,6 +131,28 @@ def ValidateColumns(
     skip_check_blank: bool = False
 ):
 
+    """
+    Validate data based on question type, value range, exclusivity, completeness, text length requirements, and custom validation.
+    
+    Parameters:
+        question_id (str): The question id to be tagged in error log/
+        srcdatacols (list[str]): column names to check as list of strings
+        columns_type (str): The expected column type (default: 'single').
+        valid_values (list, np.ndarray or Callable): List, array, or function returning valid values for 'single' and 'multiple' question types.
+        exclusive (list): List of column names that are exclusive.
+        optional_cols (list): List of columns where blanks are allowed as valid entries.
+        exclude_cols (list): List of column names to exclude from validation.
+        range_param (RangeTuple or Callable): A tuple specifying lower and upper range or a function returning such a tuple.
+        allow_blanks (bool): Whether to allow blank values as valid.
+        required (int): If set to 1, at least one of the columns must have a non-zero/non-null entry.
+        at_most (int): Maximum number of selections allowed.
+        at_least (int): Minimum number of selections required.
+        txt_min_length (int): Minimum length of text after removing spaces and special characters, if applicable.
+        txt_max_length (int): Maximum length of text after removing spaces and special characters, if applicable.
+        custom_row_validation (function): A custom validation function that takes a row as an argument.
+        condition (function): A function that takes a row and returns True if the validation should be applied.
+        skip_check_blank (bool):  Whether to skip checking for blanks in rows that do not meet the condition
+    """
     if condition is None:
         condition = lambda x: True
 
@@ -156,7 +180,7 @@ def ValidateColumns(
     elif columns_type == 'text':
         qvalidate_text(datacols, filtered_data, txt_min_length, txt_max_length, optional_cols)
 
-    qvalidate_completeness(question_id, datacols, filtered_data, required, at_least, at_most)
+    qvalidate_completeness(question_id, datacols, filtered_data, required, at_least, at_most,columns_type)
 
     # Apply custom row validation to filtered data
     if custom_row_validation is not None:

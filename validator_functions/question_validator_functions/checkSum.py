@@ -3,9 +3,9 @@ from logs import adderror
 import pandas as pd
 import numpy as np
 
-def checkSum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
+def checksum(question:Question, range_type='static', range_value=None, exclude_cols=[]):
     """
-    Check if the sum of specified columns in a DataFrame falls within a given range.
+    Check for the sum of values in the quesiton is eqial to or in the range provided.
 
     Parameters:
     question (object): The question object containing datacols attribute (list of columns to sum).

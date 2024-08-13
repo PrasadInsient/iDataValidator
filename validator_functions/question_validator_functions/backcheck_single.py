@@ -5,7 +5,7 @@ import numpy as np
 import re
 
 import pandas as pd
-from typing import List
+from typing import Callable, List
 import pandas as pd
 from typing import List, Optional, Any
 
@@ -44,23 +44,30 @@ def check_condition(value, condition):
         return value <= int(condition[2:])
     return False
 
-def backcheckSingle( question: Question, cols_to_check: List[str], condition: Optional[str] = None):
+def backcheck_single( question: Question, cols_to_check: List[str], maskcondition: Optional[str] = None, condition: Optional[Callable] = None):
     """
-    Check if the value in cols_to_check[source-1] satisfies the condition based on the source column value.
+    Verify whether a single question has a value that meets the specified condition from the provided columns.
 
     Parameters:
-    question (question): The index of the source column to match against cols_to_check.
+    question (question): Signle question to back check
     cols_to_check (list): List of column names to check.
     condition (str, optional): Condition to check on the columns (supports '=', 'in', 'range', '>'). Default is None.
     """
     def check_row(row):
         question_val = row[question.id]
         target_value = row[cols_to_check[question_val - 1]]  # Get value from cols_to_check[source-1]
-        if not check_condition(target_value, condition):
-            adderror(row['record'], question.id, target_value, f"Backcheck single failed with condition {condition}")
+        if not check_condition(target_value, maskcondition):
+            adderror(row['record'], question.id, target_value, f"Backcheck single failed with condition {maskcondition}")
         return True
 
-    DATA.apply(check_row, axis=1)  # Apply the check_row function to each row
+    if condition is None:
+        condition = lambda x: True
+
+    # Create a filtered DataFrame based on the condition
+    filtered_data = DATA[DATA.apply(condition, axis=1)]
+    
+
+    filtered_data.apply(check_row, axis=1)
 
 # Example usage
 # backcheck_single(DATA, 1, ['col1', 'col2'], condition='>')

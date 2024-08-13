@@ -6,21 +6,22 @@ import pandas as pd
 import numpy as np
 import re
 
-def checkBlanks(cols_to_check:Union[List, Question],condition: Optional[Callable] = None):
+def checkblanks(cols_to_check:Union[str,List, Question],condition: Optional[Callable] = None):
     """
-    Check if specified columns contain blank (NaN) values.
+    Check if specified columns contain non blank values.
 
     Parameters:
-    df (pd.DataFrame): The DataFrame to check.
-    cols_to_check (str or list): Column name or list of column names to check for blank values.
+    cols_to_check (str or list or question): Column name or list of column names to check for blank values.
 
     Returns:
-    pd.Series: Boolean series indicating if the specified columns are blank for each row.
+    None
     
     Usage:
-    check_for_blanks('A'))
-    check_for_blanks(['A','B']))
+    checkblanks('A'))
+    checkblanks(question)
+    checkblanks(['A','B']))
     """
+
     if isinstance(cols_to_check, List):
         xcols_to_check = cols_to_check
 

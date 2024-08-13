@@ -50,7 +50,7 @@ def qinvalidate_number(datacols, data, range_param,blank_as_invalid):
         for index in range_invalid_rows.index:
             adderror(data.at[index, 'record'], column, data.at[index, column], 'Invalid Value - Out of range')
 
-def checkInvalid(
+def checkinvalid(
     datacols: List[str],
     columns_type:str="single",
     invalid_values: Union[List, Callable, np.ndarray] = [0, 1],
@@ -59,6 +59,24 @@ def checkInvalid(
     invalid_range_value: Union[RangeTuple, Callable[[pd.Series], RangeTuple]] = (0, 100),
     condition: Optional[Callable] = None,
 ):
+    """
+    Check for invalid values in set of columns -- if any column statisfies invalid condition will be added to error log
+
+    Parameters:
+    datacols list(str) : list column names to be checked for invalid values
+    columns_type (str) : single, multi or text
+    invalid_values (list, np.ndarray or Callable): List, array, or function returning valid values for 'single' and 'multiple' question types.
+    blank_as_invalid (bool): Whether to allow blank values as invalid.
+    exclude_cols (list): List of column names to exclude from validation.
+    invalid_range_value: (RangeTuple or Callable): A tuple specifying lower and upper range or a function returning such a tuple.
+    condition (function): A function that takes a row and returns True if the validation should be applied.
+
+    Returns:
+    None
+    
+    Usage:
+    checkInvalidLogic(label, condition)
+    """    
     if condition is None:
         condition = lambda x: True
 

@@ -5,9 +5,9 @@ from logs import adderror
 import pandas as pd
 import numpy as np
 from typing import List, Union, Callable, Optional, Tuple
-from .validateColumns import *
+from .validatecolumns import *
 
-def validateQuestion(
+def validatequestion(
     question: Question,
     qtype: str = 'single',
     valid_values: Union[List, Callable, np.ndarray] = [0, 1],
@@ -44,6 +44,7 @@ def validateQuestion(
         txt_max_length (int): Maximum length of text after removing spaces and special characters, if applicable.
         custom_row_validation (function): A custom validation function that takes a row as an argument.
         condition (function): A function that takes a row and returns True if the validation should be applied.
+        skip_check_blank (bool):  Whether to skip checking for blanks in rows that do not meet the condition
 
     Returns: None
 
@@ -62,15 +63,15 @@ def validateQuestion(
     # Example question object
     question = Question(id='Q1', type='number', datacols=['col1', 'col2'])
 
-    # Call check_valid with custom row validation function and condition
-    check_valid(question, qtype='number', range_param=(0, 100), custom_row_validation=custom_row_validation_function, condition=condition)
+    # Call  with custom row validation function and condition
+    validatequestion(question, qtype='number', range_param=(0, 100), custom_row_validation=custom_row_validation_function, condition=condition)
     """
     srcdatacols = question.datacols
 
     if question.type != qtype:
         adderror("#NA", question.id, "0", f'{question.id} - question type {question.type} mismatch.')
         return
-    ValidateColumns(question.id,srcdatacols,question.type,valid_values,
+    validatecolumns(question.id,srcdatacols,question.type,valid_values,
                     exclusive_cols,optional_cols,exclude_cols,
                     range_value,allow_blanks,required,at_most,at_least,txt_min_length,txt_max_length,
                     custom_row_validation,condition,skip_check_blank

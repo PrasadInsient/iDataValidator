@@ -2,12 +2,12 @@ from survey_model import DATA, COLUMNS, QUESTIONS, Column, Columns, Question, Qu
 import pandas as pd
 import numpy as np
 import re
-from typing import List
+from typing import Callable, List, Optional
 from logs import Error, ErrorLog,adderror
 
 import pandas as pd
 
-def CheckMasking(question_cols: List[str], maskcond_cols: List[str], condition: str, always_showcols: List[str]):
+def checkmasking(question_cols: List[str], maskcond_cols: List[str], maskcondition: str ="=1",  always_showcols: List[str]=[], condition: Optional[Callable] = None):
     """
     Check if specified columns contain values that meet a specific condition and log errors.
 
@@ -27,15 +27,24 @@ def CheckMasking(question_cols: List[str], maskcond_cols: List[str], condition: 
     # Check if columns in question_cols meet the condition corresponding to columns in maskcond_cols
     checkmask(['A', 'B'], ['ConditionCol1', 'ConditionCol2'], '>0', ['C', 'D'])
     """
-    if condition.startswith('='):
-        condition_value = int(condition[1:])
+    if maskcondition.startswith('='):
+        condition_value = int(maskcondition[1:])
         condition_check = DATA[maskcond_cols] == condition_value
-    elif condition.startswith('in'):
-        condition_values = list(map(int, condition[2:].strip()[1:-1].split(',')))
+    elif maskcondition.startswith('in'):
+        condition_values = list(map(int, maskcondition[2:].strip()[1:-1].split(',')))
         condition_check = DATA[maskcond_cols].isin(condition_values)
-    elif condition.startswith('>'):
-        condition_value = int(condition[1:])
+    elif maskcondition.startswith('>'):
+        condition_value = int(maskcondition[1:])
         condition_check = DATA[maskcond_cols] > condition_value
+    elif maskcondition.startswith('<'):
+        condition_value = int(maskcondition[1:])
+        condition_check = DATA[maskcond_cols] < condition_value
+    elif maskcondition.startswith('>='):
+        condition_value = int(maskcondition[2:])
+        condition_check = DATA[maskcond_cols] >= condition_value
+    elif maskcondition.startswith('<='):
+        condition_value = int(maskcondition[2:])
+        condition_check = DATA[maskcond_cols] <= condition_value
     else:
         raise ValueError("Invalid condition. Use '=', 'in', or '>' for conditions.")
 
@@ -51,5 +60,11 @@ def CheckMasking(question_cols: List[str], maskcond_cols: List[str], condition: 
                 adderror(row['record'], col, row[col], f"Column {col} should always have a value including zero")
                 
         return True
+    
+    if condition is None:
+        condition = lambda x: True
 
-    DATA.apply(check_row, axis=1)
+    # Create a filtered DataFrame based on the condition
+    filtered_data = DATA[DATA.apply(condition, axis=1)]
+    
+    filtered_data.apply(check_row, axis=1)

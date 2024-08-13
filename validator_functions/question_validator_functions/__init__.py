@@ -1,13 +1,12 @@
-from .validateQuestion import validateQuestion
-from .validateColumns import ValidateColumns
-from .checkInvalid import checkInvalid
-from .checkBlanks import checkBlanks
-from .checkLogic import checkInvalidLogic, checkValidLogic
-from .CheckMasking import CheckMasking
-from .checkNonBlanks import checkNonBlanks
-from .checkQuestionMasking import checkQuestionMasking
-from .checkRank import checkRank
-from .checkSum import checkSum
-from .checkSum100 import checkSum100
-from .checkTerm import checkTerm
-
+from .validatequestion import validatequestion
+from .validatecolumns import validatecolumns
+from .checkinvalid import checkinvalid
+from .checkblanks import checkblanks
+from .checklogic import checkinvalid_logic, checkvalid_logic
+from .checkmasking import checkmasking
+from .checknoblanks import checknoblanks
+from .checkquestion_mask import checkquestion_mask
+from .checkrank import checkrank
+from .checksum import checksum
+from .checksum100 import checksum100
+from .checkterm import checkterm
