@@ -22,7 +22,7 @@ def checkvalid_logic(logic_label:str,condition: Callable):
     """
     filtered_data = DATA[~DATA.apply(condition, axis=1)]
     for index in filtered_data.index:
-        adderror(filtered_data.at[index, 'record'], logic_label, "", f'Logic Check failed')
+        adderror(filtered_data.at[index, 'record'], logic_label, "", f'checkvalid_logic - Logic Check failed')
 
 def checkinvalid_logic(logic_label:str,condition: Callable):
     """
@@ -40,4 +40,4 @@ def checkinvalid_logic(logic_label:str,condition: Callable):
     """    
     filtered_data = DATA[DATA.apply(condition, axis=1)]
     for index in filtered_data.index:
-        adderror(filtered_data.at[index, 'record'], logic_label, "", f'Logic Check failed')
+        adderror(filtered_data.at[index, 'record'], logic_label, "", f'checkinvalid_logic - Logic Check failed')

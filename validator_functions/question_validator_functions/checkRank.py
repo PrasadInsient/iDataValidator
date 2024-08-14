@@ -7,7 +7,7 @@ from logs import Error, ErrorLog, adderror
 
 import pandas as pd
 
-def checkrank(question:Question, max_rank_type='static', max_rank_value=None, exclude_cols=[],condition: Optional[Callable] = None):
+def checkrank(question:Question, max_rank_type='static', min_rank_value=1,max_rank_value=None, exclude_cols=[],condition: Optional[Callable] = None):
     """
     Check for unique values across specified columns in a question, ensuring each value is present only once
     and falls within the specified dynamic rank range (min_rank = 1).
@@ -34,7 +34,7 @@ def checkrank(question:Question, max_rank_type='static', max_rank_value=None, ex
     # Check with excluding some columns
     print(checkrank(question, max_rank_type='static', max_rank_value=15, exclude_cols=['D']))
     """
-    min_rank = 1
+    min_rank_value = 1
 
     columns_to_check = [col for col in question.datacols if col not in exclude_cols]
 
@@ -58,7 +58,7 @@ def checkrank(question:Question, max_rank_type='static', max_rank_value=None, ex
         if len(values) != row[columns_to_check].dropna().size:
             for col in columns_to_check:
                 if not pd.isna(row[col]):
-                    adderror(row['record'], col, row[col], "Duplicate values found.")
+                    adderror(row['record'], col, row[col], "checkrank - Duplicate values found.")
             return False
         
         try:
@@ -66,13 +66,13 @@ def checkrank(question:Question, max_rank_type='static', max_rank_value=None, ex
         except ValueError:
             for col in columns_to_check:
                 if not pd.isna(row[col]):
-                    adderror(row['record'], col, row[col], "Non-integer value found.")
+                    adderror(row['record'], col, row[col], "checkrank - Non-integer value found.")
             return False
 
-        if not all(min_rank <= val <= max_rank_val for val in int_values):
+        if not all(min_rank_value <= val <= max_rank_val for val in int_values):
             for col in columns_to_check:
-                if not pd.isna(row[col]) and (int(row[col]) < min_rank or int(row[col]) > max_rank_val):
-                    adderror(row['record'], col, row[col], f"Value out of range {min_rank} to {max_rank_val}.")
+                if not pd.isna(row[col]) and (int(row[col]) < min_rank_value or int(row[col]) > max_rank_val):
+                    adderror(row['record'], col, row[col], f"checkrank - Rank out of range {min_rank_value} to {max_rank_val}.")
             return False
         
         return True

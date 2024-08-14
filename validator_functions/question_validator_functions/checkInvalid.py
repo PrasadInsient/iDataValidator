@@ -28,7 +28,7 @@ def qinvalidate_single_multiple(datacols, data, invalid_values,blank_as_invalid)
         ]
 
         for index in invalid_rows.index:
-            adderror(data.at[index, 'record'], column, data.at[index, column], 'Invalid Value')
+            adderror(data.at[index, 'record'], column, data.at[index, column], 'checkinvalid - Invalid Value')
 
 def qinvalidate_number(datacols, data, range_param,blank_as_invalid):
     for column in datacols:
@@ -48,7 +48,7 @@ def qinvalidate_number(datacols, data, range_param,blank_as_invalid):
         ]
 
         for index in range_invalid_rows.index:
-            adderror(data.at[index, 'record'], column, data.at[index, column], 'Invalid Value - Out of range')
+            adderror(data.at[index, 'record'], column, data.at[index, column], 'checkinvalid - Invalid Value')
 
 def checkinvalid(
     datacols: List[str],

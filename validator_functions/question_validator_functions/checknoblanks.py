@@ -38,7 +38,7 @@ def checknoblanks(cols_to_check:Union[str, List, Question],condition: Optional[C
         for col in xcols_to_check:
             value = row[col]
             if pd.isna(value):
-                adderror(row['record'], col, row[col], f"Non blank check failed")
+                adderror(row['record'], col, row[col], f"checknoblanks - Non blank check failed")
         return True  # Return True to satisfy the return type expected by apply
 
 

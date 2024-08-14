@@ -23,24 +23,24 @@ def check_condition(value, condition):
     Returns:
     bool: True if the condition is satisfied, False otherwise.
     """
-    if condition == '=':
+    if condition.startswith('='):
         return value == int(condition[1:])
-    elif condition == 'in':
+    elif condition.startswith('in'):
         values = list(map(int, condition[2:].strip()[1:-1].split(',')))
         return value in values
-    elif condition == 'range':
+    elif condition.startswith('range'):
         try:
             min_val, max_val = map(int, condition[5:].strip()[1:-1].split(','))
             return min_val <= value <= max_val
         except ValueError:
             return False
-    elif condition == '>':
+    elif condition.startswith('>'):
         return value > int(condition[1:])
-    elif condition == '<':
+    elif condition.startswith('<'):
         return value < int(condition[1:])
-    elif condition == '>=':
+    elif condition.startswith('>='):
         return value >= int(condition[2:])
-    elif condition == '<=':
+    elif condition.startswith('<='):
         return value <= int(condition[2:])
     return False
 

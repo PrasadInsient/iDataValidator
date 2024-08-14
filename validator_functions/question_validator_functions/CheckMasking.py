@@ -46,18 +46,18 @@ def checkmasking(question_cols: List[str], maskcond_cols: List[str], maskconditi
         condition_value = int(maskcondition[2:])
         condition_check = DATA[maskcond_cols] <= condition_value
     else:
-        raise ValueError("Invalid condition. Use '=', 'in', or '>' for conditions.")
+        raise ValueError("checkmasking - Invalid condition. Use '=', 'in', or '>' for conditions.")
 
     def check_row(row):
         for q_col, m_col in zip(question_cols, maskcond_cols):
             if not pd.isna(row[q_col]) and not condition_check.loc[row.name, m_col]:
-                adderror(row['record'], q_col, row[q_col], f"Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
+                adderror(row['record'], q_col, row[q_col], f"checkmasking - Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
             if pd.isna(row[q_col]) and condition_check.loc[row.name, m_col]:
-                adderror(row['record'], q_col, row[q_col], f"Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
+                adderror(row['record'], q_col, row[q_col], f"checkmasking - Value {row[q_col]} does not meet the condition {condition} for column {m_col}")
         
         for col in always_showcols:
             if pd.isna(row[col]):
-                adderror(row['record'], col, row[col], f"Column {col} should always have a value including zero")
+                adderror(row['record'], col, row[col], f"checkmasking - Always show Column {col} missing data")
                 
         return True
     

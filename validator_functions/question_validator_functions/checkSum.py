@@ -61,4 +61,4 @@ def checksum(question:Question, range_type='static', range_value=None, exclude_c
     for index, (sum_val, min_val, max_val) in enumerate(zip(column_sum, min_range, max_range)):
         if not (min_val <= sum_val <= max_val):
             record =DATA.at[index, 'record']
-            adderror(record, question.id, sum_val, f"Sum {sum_val} out of range ({min_val}, {max_val})")
+            adderror(record, question.id, sum_val, f"checksum - Sum {sum_val} out of range ({min_val}, {max_val})")
