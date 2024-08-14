@@ -11,9 +11,9 @@ datapath_temp = os.path.join(BASE_DIR, 'data', 'surveydata.xlsx')
 datamapath_temp = os.path.join(BASE_DIR, 'data', 'datamap.json')
 
 
-DATA_PATH = fr"{datapath_temp}"
-DATA_MAP_PATH =  fr"{datamapath_temp}"
+DATA_PATH:str = fr"{datapath_temp}"
+DATA_MAP_PATH:str =  fr"{datamapath_temp}"
 HEADERS = {"x-apikey": API_KEY}
-DATA_MAP_URL = f"https://{SERVER}/api/v1/surveys/{PATH}/datamap?format=json"
-DATA_URL = f"https://{SERVER}/api/v1/surveys/{PATH}/data?format=csv&cond=qualified"
-METHOD = "API" #API or FILES
+DATA_MAP_URL:str = f"https://{SERVER}/api/v1/surveys/{PATH}/datamap?format=json"
+DATA_URL:str = f"https://{SERVER}/api/v1/surveys/{PATH}/data?format=csv&cond=qualified"
+METHOD:str = "API" #API or FILES

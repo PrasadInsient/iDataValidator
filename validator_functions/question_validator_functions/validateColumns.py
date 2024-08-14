@@ -51,7 +51,7 @@ def qvalidate_single_multiple(questionid, datacols, data, valid_values, optional
         if num_selected > at_most:
             adderror(row['record'], questionid, "", f"More than {at_most} selections made.")
 
-def qvalidate_number(datacols, data, range_param, allowblanks, optional_cols):
+def qvalidate_number(datacols, data, range_param, allowblanks, optional_cols,exclusive_cols):
     data = data.copy()
     
     for column in datacols:
@@ -60,7 +60,7 @@ def qvalidate_number(datacols, data, range_param, allowblanks, optional_cols):
         else:
             data['range_limits'] = [range_param] * len(data)
         
-        allowcolumnnblank = allowblanks or column in optional_cols
+        allowcolumnnblank = allowblanks or len(exclusive_cols)>0 or (column in optional_cols)
         
         range_invalid_rows = data[
             ~data.apply(
@@ -176,7 +176,7 @@ def validatecolumns(
     if columns_type in ['single', 'multiple']:
         qvalidate_single_multiple(question_id, datacols, filtered_data, valid_values, optional_cols, at_least, at_most, allow_blanks)
     elif columns_type == 'number':
-        qvalidate_number(datacols, filtered_data, range_value, allow_blanks, optional_cols)
+        qvalidate_number(datacols, filtered_data, range_value, allow_blanks, optional_cols,exclusive_cols)
     elif columns_type == 'text':
         qvalidate_text(datacols, filtered_data, txt_min_length, txt_max_length, optional_cols)
 

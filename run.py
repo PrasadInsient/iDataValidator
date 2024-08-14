@@ -56,6 +56,8 @@ def main():
         
         print("Starting question validator...")
         question_validator()
+        question_validatorx1()
+        question_validatorx2()
         print("Finished question validator...")
         
         print("Starting record validator...")

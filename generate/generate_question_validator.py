@@ -14,6 +14,8 @@ def generate_questions_validator(DATA_MAP_PATH):
         return False
     
     question_validator_file = 'validators/question_validator.py'
+    question_validator_filex1 = 'validators/question_validatorx1.py'
+    question_validator_filex2 = 'validators/question_validatorx2.py'
     
     try:
         
@@ -53,11 +55,86 @@ def generate_questions_validator(DATA_MAP_PATH):
                 f.write('if __name__ == "__main__":\n')
                 f.write('    question_validator()\n')
                 f.write('    geterrors()\n')
-            print(f"Questions validation file '{question_validator_file}' generated successfully.")
-            return True
+
+        if check_file(question_validator_filex1):
+            with open(question_validator_filex1, 'w') as f:
+                f.write("import sys\n")
+                f.write("import os\n")
+                f.write("current_dir = os.path.dirname(os.path.abspath(__file__))\n")
+                f.write("parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))\n")
+                f.write("sys.path.insert(0, parent_dir)\n")
+                f.write("from survey_model import DATA, COLUMNS, QUESTIONS, QUESTIONTYPES, Column, Columns, Question, Questions\n")
+                f.write("from typing import List\n")
+                f.write("import pandas as pd\n")
+                f.write("import numpy as np\n")
+                f.write("import re\n")
+                f.write("from validator_functions.question_validator_functions import *\n")
+                f.write("from validator_functions.record_validator_functions import *\n")
+                f.write("from validators.record_validator import *\n")
+                f.write("from validators.unit_validators import *\n")
+                f.write("from logs import geterrors\n")
+                f.write("from functools import partial\n")
+                f.write("from config import *\n")
+                
+                f.write("def question_validatorx1():\n")               
+                f.write(f"  pass\n  '''")
+                for question in questions:
+                    qid = question['qlabel']
+                    pattern = r'^(.*?)_([A-Za-z]{0,3})(\d+)$'
+                    
+                    match = re.match(pattern, qid)
+                    if match:
+                        f.write(f"  #{qid}\n  qxcustom_validator = partial(qx_validator, loopid=f'{match.group(2)}{{loopid}}')\n\n")
+                        f.write(f"  #{qid}\n  validatequestion(eval(f'QUESTIONS.{match.group(1)}_{match.group(2)}{{loopid}}'),qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row,loopid=loopid: True,range_value=(0,100))\n\n")
+                    else:    
+                        f.write(f"  #{qid}\n  validatequestion(QUESTIONS.{qid},qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row: True,range_value=(0,100))\n\n")
+                f.write(f"'''\n\n")
+                f.write('if __name__ == "__main__":\n')
+                f.write('    question_validatorx1()\n')
+                f.write('    geterrors()\n')
+        
+        if check_file(question_validator_filex2):
+            with open(question_validator_filex2, 'w') as f:
+                f.write("import sys\n")
+                f.write("import os\n")
+                f.write("current_dir = os.path.dirname(os.path.abspath(__file__))\n")
+                f.write("parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))\n")
+                f.write("sys.path.insert(0, parent_dir)\n")
+                f.write("from survey_model import DATA, COLUMNS, QUESTIONS, QUESTIONTYPES, Column, Columns, Question, Questions\n")
+                f.write("from typing import List\n")
+                f.write("import pandas as pd\n")
+                f.write("import numpy as np\n")
+                f.write("import re\n")
+                f.write("from validator_functions.question_validator_functions import *\n")
+                f.write("from validator_functions.record_validator_functions import *\n")
+                f.write("from validators.record_validator import *\n")
+                f.write("from validators.unit_validators import *\n")
+                f.write("from logs import geterrors\n")
+                f.write("from functools import partial\n")
+                f.write("from config import *\n")
+                
+                f.write("def question_validatorx2():\n")               
+                f.write(f"  pass\n  '''")
+                for question in questions:
+                    qid = question['qlabel']
+                    pattern = r'^(.*?)_([A-Za-z]{0,3})(\d+)$'
+                    
+                    match = re.match(pattern, qid)
+                    if match:
+                        f.write(f"  #{qid}\n  qxcustom_validator = partial(qx_validator, loopid=f'{match.group(2)}{{loopid}}')\n\n")
+                        f.write(f"  #{qid}\n  validatequestion(eval(f'QUESTIONS.{match.group(1)}_{match.group(2)}{{loopid}}'),qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row,loopid=loopid: True,range_value=(0,100))\n\n")
+                    else:    
+                        f.write(f"  #{qid}\n  validatequestion(QUESTIONS.{qid},qtype=QUESTIONTYPES.NONE,valid_values=np.arange(0, 2), exclusive_cols=[],allow_blanks=False,skip_check_blank=False,\n             condition =lambda row: True,range_value=(0,100))\n\n")
+                f.write(f"'''\n\n")
+                f.write('if __name__ == "__main__":\n')
+                f.write('    question_validatorx2()\n')
+                f.write('    geterrors()\n')
+        
+        print(f"Questions validation file '{question_validator_file}' generated successfully.")
+        return True        
     except Exception as e:
-            print(f"Error in Questions validation file generation.",e)
-            return False
+        print(f"Error in Questions validation file generation.",e)
+        return False
     
     return False
 
