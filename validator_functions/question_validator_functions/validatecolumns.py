@@ -44,12 +44,12 @@ def qvalidate_single_multiple(questionid, datacols, data, valid_values, optional
         for index in invalid_rows.index:
             adderror(data.at[index, 'record'], column, data.at[index, column], 'Invalid Value')
 
-    for index, row in data.iterrows():
-        num_selected = row[datacols].apply(lambda x: pd.notna(x) and x > 0).sum()
-        if num_selected < at_least:
-            adderror(row['record'], questionid, "", f"Fewer than {at_least} selections made.")
-        if num_selected > at_most:
-            adderror(row['record'], questionid, "", f"More than {at_most} selections made.")
+#    for index, row in data.iterrows():
+#        num_selected = row[datacols].apply(lambda x: pd.notna(x) and x > 0).sum()
+#        if num_selected < at_least:
+#            adderror(row['record'], questionid, "", f"Fewer than {at_least} selections made.")
+#        if num_selected > at_most:
+#            adderror(row['record'], questionid, "", f"More than {at_most} selections made.")
 
 def qvalidate_number(datacols, data, range_param, allowblanks, optional_cols,exclusive_cols):
     data = data.copy()
@@ -94,9 +94,10 @@ def qvalidate_text(datacols, data, txt_min_length, txt_max_length, optional_cols
 def qvalidate_completeness(questionid, datacols, data, required, at_least, at_most,columns_type):
     if required == 1:
         # Define the condition for non-blank responses
-        non_blank_condition = lambda x: pd.notna(x) and x != 0 and x != ''
-        if columns_type=='number':
-            non_blank_condition = lambda x: pd.notna(x) and x != ''
+        non_blank_condition = lambda x: pd.notna(x) and x != ''
+        if columns_type=='multiple':
+            non_blank_condition = lambda x: pd.notna(x) and x != 0 and x != ''
+            
 
         # Apply the condition across the specified columns and count non-blank responses
         non_blank_counts = data[datacols].apply(lambda col: col.map(non_blank_condition)).sum(axis=1)
