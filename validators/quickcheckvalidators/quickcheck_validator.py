@@ -1,9 +1,12 @@
 import sys
 import os
-
+# Get the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+# Go up two levels
+parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir, os.pardir))
+# Insert the directory two levels up to sys.path
 sys.path.insert(0, parent_dir)
+
 
 import pandas as pd
 from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL, DATA_MAP_PATH, METHOD
