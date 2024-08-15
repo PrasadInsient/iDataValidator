@@ -10,3 +10,4 @@ from .checkrank import checkrank
 from .checksum import checksum
 from .checksum100 import checksum100
 from .checkterm import checkterm
+from .backcheck_single import backcheck_single
