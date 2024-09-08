@@ -8,7 +8,7 @@ def fetch_data(DATA_URL:str,HEADERS:dict,DATA_PATH:str)->bool:
         response.raise_for_status()
         data = response.content.decode('utf-8')
         csv_data = pd.read_csv(io.StringIO(data))
-        csv_data.to_excel(DATA_PATH, index=False)
+        csv_data.to_csv(DATA_PATH, index=False)
         return True
     except:
         return False

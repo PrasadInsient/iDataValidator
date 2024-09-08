@@ -7,7 +7,7 @@ PATH=""
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 BASE_DIR = current_dir
-datapath_temp = os.path.join(BASE_DIR, 'data', 'surveydata.xlsx')
+datapath_temp = os.path.join(BASE_DIR, 'data', 'surveydata.csv')
 datamapath_temp = os.path.join(BASE_DIR, 'data', 'datamap.json')
 
 

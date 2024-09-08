@@ -12,14 +12,12 @@ def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
     survey_file = 'survey_model/columns.py'
     
     with open(survey_file, 'w') as f:
-        f.write("from .column import Column\n") 
         f.write("from typing import List\n")
         f.write("import pandas as pd\n")
         f.write("from config import *\n")
         try:
             f.write("class Columns:\n")
             f.write("    def __init__(self):\n")
-            f.write(f"        self.data = pd.read_excel(DATA_PATH)\n")
             for column in columns:
                 label = column['label']
                 f.write(f"        self.{label} = '{label}'\n")

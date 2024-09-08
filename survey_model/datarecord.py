@@ -1,7 +1,8 @@
-from .question import Question
+from typing import List
+import pandas as pd
 from .columns import Columns
 from typing import List
 import pandas as pd
-class Questions:
+class DataRecord:
     def __init__(self):
         pass

@@ -34,4 +34,4 @@ def print_function_docs_in_directory(directory, exclude_dirs=None, exclude_files
                 extract_functions_from_file(file_path)
 
 # Example usage:
-print_function_docs_in_directory('/Users/prasad/github/iDataValidator')
+print_function_docs_in_directory('/Users/prasad/github/iDataValidator/validator_functions')

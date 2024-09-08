@@ -24,7 +24,7 @@ def generate_data_objects(DATA_PATH)->bool:
         f.write("        return column\n\n")
         
         try:
-            f.write(f"DATA = pd.read_excel(DATA_PATH)\n\n")
+            f.write(f"DATA = pd.read_csv(DATA_PATH)\n\n")
             f.write("for column in DATA.columns:\n")
             f.write("    DATA[column] = convert_column(DATA[column])\n\n")
             

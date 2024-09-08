@@ -1,7 +1,7 @@
 import json
 from utils import GetQuestions, replace_non_ascii
 
-def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
+def generate_datarecord(DATA_MAP_PATH:str,DATA_PATH:str):
     DATA_PATH = DATA_PATH.replace("\\","\\\\")
     with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
         data_map = json.load(file)
@@ -11,17 +11,19 @@ def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
     if len(questions)==0:
          return False
 
-    survey_file = 'survey_model/questions.py'
+    survey_file = 'survey_model/datarecord.py'
     
     try:
         with open(survey_file, 'w') as f:
             f.write("from .question import Question\n")
+            f.write("from .questions import Questions\n")
             f.write("from .columns import Columns\n") 
             f.write("from typing import List\n")
             f.write("import pandas as pd\n")
             f.write("from config import *\n")
-            f.write("class Questions:\n")
-            f.write("    def __init__(self):\n")
+            f.write("class DataRecord:\n")
+            f.write("    def __init__(self,row:pd.Series):\n")
+            f.write(f"        self.row = row\n")
             for question in questions:
                 qid = question['qlabel']
                 qtype = question['qtype']
@@ -31,13 +33,10 @@ def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
 
             f.write("        self.errorDict = {}\n")
             f.write("\n")
-            f.write("    def __repr__(self):\n")
-            f.write("        questions = [getattr(self, attr) for attr in dir(self) if attr.startswith('question_')]\n")
-            f.write("        return f\"Survey(title={{self.title}}, questions={{questions}})\"\n")
 
-        print(f"Questions file '{survey_file}' generated successfully.")
+        print(f"DataRecord file '{survey_file}' generated successfully.")
     except:
-            print(f"Error in Survey file generation.")
+            print(f"Error in DataRecord file generation.")
 
     
     

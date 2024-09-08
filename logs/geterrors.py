@@ -15,7 +15,7 @@ def geterrors():
     error_df = pd.DataFrame(error_data)
 
     if len(error_df) > 0:
-        grouped_df = error_df.groupby(['Reason', 'Column', 'Value']).agg(
+        grouped_df = error_df.groupby(['Reason', 'Column']).agg(
             Record=('Record', list),
             Count=('Record', 'count')
         ).reset_index()
