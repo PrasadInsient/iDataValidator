@@ -19,7 +19,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-
+    runtype = "FULLRUN"
     if not os.path.exists(DATA_PATH) or args.mode == "GENERATE":
         runtype = "GENERATE"
     else:
