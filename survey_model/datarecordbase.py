@@ -192,3 +192,13 @@ class DataRecordBase:
         datarow = self.row #type:ignore
         backcheckmulti(questionid,  datarow, question_cols,cols_to_check,backcheckcondition,
                        always_showcols,ignoresourcecols,ignoretargetcols,condition)
+
+    def checktwowayGG(self,GGquestion: str, GGprices=[], priceq: str = "",
+                  start_pos=3, no_times=3, hideinvalidoptions=1, order=1, condition: bool = True):
+        datarow = self.row #type:ignore
+        checktwowayGG(GGquestion,datarow,GGprices,priceq,start_pos,no_times,hideinvalidoptions,order,condition)
+
+    def checkonewayGG(self,GGquestion: str, GGprices=[], priceq: str = "",
+                  start_pos=3, no_times=3, hideinvalidoptions=1, order=1, condition: bool = True):
+        datarow = self.row #type:ignore
+        checkonewayGG(GGquestion,datarow,GGprices,priceq,start_pos,no_times,hideinvalidoptions,order,condition)
