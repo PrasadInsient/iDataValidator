@@ -4,12 +4,12 @@ from logs import Error, ErrorLog,adderror
 from validator_functions.checkcondition import checkcondition
 import pandas as pd
 
-def checkmasking(questionid,datarow:pd.Series,question_cols: List[str], maskcond_cols: List[str], 
-                 maskcondition: str ="=1",  always_showcols: List[str]=[], condition= True):
+def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: List[str],  cols_to_check: List[str],backcheckcondition: str ="=1",  
+        always_showcols: List[str]=[],ignoresourcecols:List[str]=[],ignoretargetcols:List[str]=[],condition= True):
 
     """
-    Perform a masking check on specified columns in a row of survey data. The function checks whether certain 
-    columns (from `question_cols`) should be shown or hidden based on conditions applied to corresponding columns 
+    Back checks slections on specified columns in a row of survey data. The function checks whether certain 
+    columns (from `question_cols`) is selcted are satisfying corresponding columns 
     in `maskcond_cols`. If any condition is violated, an error is logged.
 
     Parameters:
@@ -48,19 +48,17 @@ def checkmasking(questionid,datarow:pd.Series,question_cols: List[str], maskcond
         datarow = datarow.copy()
 
         # Exclude columns in always_showcols from question_cols
-        question_cols = [col for col in question_cols if col not in always_showcols]
+        question_cols = [col for col in question_cols if col not in always_showcols and col not in ignoretargetcols]
+
+        cols_to_check = [col for col in cols_to_check if col not in ignoresourcecols]
         
         # Perform the regular masking check on question_cols and maskcond_cols
-        for q_col, m_col in zip(question_cols, maskcond_cols):
+        for q_col, m_col in zip(question_cols, cols_to_check):
             # If a question column contains a value, but the mask condition is not satisfied, log an error
-            if not pd.isna(datarow[q_col]) and not checkcondition(datarow[m_col], maskcondition):
-                adderror(datarow['record'], questionid, datarow[q_col], f"Masking check failed")
-
-            # If a question column is empty but the mask condition is satisfied, log an error
-            if pd.isna(datarow[q_col]) and checkcondition(datarow[m_col], maskcondition):
-                adderror(datarow['record'], questionid, datarow[q_col], f"Masking check failed")
+            if not pd.isna(datarow[q_col]) and not checkcondition(datarow[m_col], backcheckcondition):
+                adderror(datarow['record'], questionid, datarow[q_col], f"Backcheck multi failed")
 
         # Check the always_showcols to ensure they always have a value (not null)
         for col in always_showcols:
             if pd.isna(datarow[col]):
-                adderror(datarow['record'], questionid, datarow[col], f"Masking check failed")
+                adderror(datarow['record'], questionid, datarow[col], f"Backcheck multi failed")

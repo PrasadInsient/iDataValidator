@@ -1,4 +1,5 @@
-from .backcheck_single import backcheck_single
+from .backchecksingle import backchecksingle
+from .backcheckmulti import backcheckmulti
 from .checkblanks import checkblanks
 from .checknonblanks import checknonblanks
 from .checkcondition import checkcondition

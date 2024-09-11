@@ -1,56 +1,76 @@
 iDataValidator/
 ├── run.py
+├── .DS_Store
 ├── config.py
 ├── Specs
 ├── validator_functions/
-│   ├── record_validator_functions/
-    │   └── __init__.py
-    └── question_validator_functions/
-    │   ├── __init__.py
-    │   ├── checkSum100.py
-    │   ├── checkSum.py
-    │   ├── checkBlanks.py
-    │   ├── checkCondition.py
-    │   ├── checkQuestionMasking.py
-    │   ├── checkTerm.py
-    │   ├── backcheckSingle.py
-    │   ├── checkNonBlanks.py
-    │   ├── validateColumns.py
-    │   ├── checkRank.py
-    │   ├── checkInvalid.py
-    │   ├── validateQuestion.py
-    │   ├── checkLogic.py
-        └── CheckMasking.py
+│   validator_functions/
+│   ├── validatesingle.py
+│   ├── checksum100.py
+│   ├── checksum.py
+│   ├── checkblanks.py
+│   ├── checkcondition.py
+│   ├── checkmaxdiff.py
+│   ├── __init__.py
+│   ├── checknonblanks.py
+│   ├── vwcheck.py
+│   ├── validatemulti.py
+│   ├── validatetext.py
+│   ├── validatenumeric.py
+│   ├── checkrank.py
+│   ├── backchecksingle.py
+│   ├── checkexclusive.py
+│   ├── checkcompselection.py
+    └── checkmasking.py
 ├── utils/
+│   utils/
+│   ├── getdoc.py
+│   ├── .DS_Store
+│   ├── printstructure.py
 │   ├── __init__.py
 │   ├── map_process.py
 │   ├── xml_utils.py
+│   ├── printdoc.py
     └── cleanmap.py
+├── iDataValidator_functions.docx
 ├── logs/
+│   logs/
 │   ├── __init__.py
 │   ├── geterrors.py
 │   ├── adderror.py
     └── errors.py
+├── .gitignore
 ├── generate/
-│   ├── __init__.py
+│   generate/
 │   ├── generate_columns.py
+│   ├── generate_datarecord.py
 │   ├── fetch_data.py
-│   ├── generate_question_validator.py
+│   ├── __init__.py
 │   ├── generate_questions.py
+│   ├── generate_validators.py
 │   ├── fetch_data_map.py
     └── generate_data_objects.py
 ├── survey_model/
-│   ├── __init__.py
+│   survey_model/
 │   ├── question.py
 │   ├── questions.py
+│   ├── __init__.py
 │   ├── questiontypes.py
 │   ├── columns.py
-│   ├── data_objects.py
-    └── column.py
+│   ├── datarecord.py
+    └── data_objects.py
 ├── validators/
+│   validators/
+│   ├── validator.py
+│   ├── quickcheckvalidators/
+│   │   quickcheckvalidators/
+│   │   ├── quickcheck_validator.py
+│   │   ├── quickcheck_validatorx1.py
+    │   └── quickcheck_validatorx2.py
 │   ├── __init__.py
-│   ├── quickcheck_validator.py
-│   ├── question_validator.py
-│   ├── unit_validators.py
-    └── record_validator.py
+│   ├── validatorx2.py
+│   ├── custom_functions.py
+    └── validatorx1.py
 └── data/
+    data/
+    └── readme.txt

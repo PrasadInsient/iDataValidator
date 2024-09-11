@@ -5,7 +5,7 @@ from .checksum import checksum
 
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
-def checksum100(questionid, datacols, datarow:pd.Series, exclude_cols=[],condition=True,range_param:RangeTuple=(0,100)):
+def checksum100(questionid, datacols, datarow:pd.Series, sum_condition: str = '=100',ignore_cols=[],condition=True):
     """
     Perform a sum check on specified columns in a row of survey data to 100.
 
@@ -13,7 +13,7 @@ def checksum100(questionid, datacols, datarow:pd.Series, exclude_cols=[],conditi
         questionid (str): The ID of the question being checked (used for logging purposes).
         datacols (list): A list of column names whose values will be summed.
         datarow (pd.Series): A single row from a pandas DataFrame, where the sum check is performed.
-        exclude_cols (list, optional): A list of column names to exclude from the sum calculation. These columns 
+        ignore_cols (list, optional): A list of column names to exclude from the sum calculation. These columns 
                                        are removed from `datacols` before the check is performed. Defaults to an empty list.
         condition (bool, optional): A flag to enable or disable the check. If `True`, the sum check is performed. 
                                     If `False`, the function does nothing. Defaults to `True`.
@@ -29,6 +29,6 @@ def checksum100(questionid, datacols, datarow:pd.Series, exclude_cols=[],conditi
         checksum('Q1', datacols, datarow)
 
     """    
-    checksum(questionid,datacols, datarow, exclude_cols)
+    checksum(questionid,datacols, datarow, sum_condition,ignore_cols,condition)
     
 

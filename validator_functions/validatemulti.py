@@ -2,7 +2,7 @@ import pandas as pd
 from logs import adderror
 
 def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_values: list = [0,1], optional_cols: list = [], 
-                  exclude_cols: list = [], exclusive_cols: list = [], at_least: int = 1, at_most: int = -1, 
+                exclusive_cols: list = [], ignore_cols: list = [], at_least: int = 1, at_most: int = -1, 
                   allowblanks: bool = False, required: int = 1, condition: bool = True):
     """
     Perform a multi-select validation on a set of columns in a row of survey data. This function checks if the selected
@@ -15,7 +15,7 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
         datarow (pd.Series): A single row from a pandas DataFrame, where the multi-select validation is performed.
         valid_values (list, optional): A list of valid values for the multi-select columns. Defaults to [0,1].
         optional_cols (list, optional): Columns where blank values are allowed. Defaults to an empty list.
-        exclude_cols (list, optional): Columns to exclude from the multi-select validation. These columns are removed 
+        ignore_cols (list, optional): Columns to exclude from the multi-select validation. These columns are removed 
                                        from `datacols` before the check is performed. Defaults to an empty list.
         exclusive_cols (list, optional): Columns that should behave exclusively (i.e., only one can be selected).
                                          Defaults to an empty list.
@@ -51,7 +51,7 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
             datacols.append(col)
 
     # Remove any excluded columns from datacols
-    for col in exclude_cols:
+    for col in ignore_cols:
         if col in datacols:
             datacols.remove(col)
 

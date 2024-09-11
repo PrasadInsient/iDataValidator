@@ -2,7 +2,7 @@ import pandas as pd
 from logs import adderror
 
 def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_values: list, 
-                   optional_cols: list = [], exclude_cols: list = [], allowblanks: bool = False, condition: bool = True):
+                   optional_cols: list = [], ignore_cols: list = [], allowblanks: bool = False, condition: bool = True):
     """
     Perform single-value validation on specified columns in a row of survey data. The function checks if the values 
     in `datacols` are valid according to the provided `valid_values` list, optionally allows blanks, and excludes 
@@ -14,7 +14,7 @@ def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_va
         datarow (pd.Series): A single row from a pandas DataFrame, where the single-value validation is performed.
         valid_values (list): A list of valid values that the data in `datacols` should match.
         optional_cols (list, optional): A list of columns where blank values are allowed. Defaults to an empty list.
-        exclude_cols (list, optional): A list of columns to exclude from the single-value validation. These columns 
+        ignore_cols (list, optional): A list of columns to exclude from the single-value validation. These columns 
                                        are removed from `datacols` before the check is performed. Defaults to an empty list.
         allowblanks (bool, optional): Whether blank values are allowed in the columns. Defaults to False.
         condition (bool, optional): A flag to enable or disable the check. If `True`, the single-value validation 
@@ -40,7 +40,7 @@ def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_va
     datarow = datarow.copy()
 
     # Remove any excluded columns from datacols
-    for col in exclude_cols:
+    for col in ignore_cols:
         if col in datacols:
             datacols.remove(col)
 

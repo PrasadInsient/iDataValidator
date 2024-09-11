@@ -74,7 +74,7 @@ def generate_validator_file(file_path, questions, validator_name):
                 match = re.match(r'^(.*?)_([A-Za-z]{0,3})(\d+)$', qid)
                 if match:
                     f.write(f"    # {qid}\n")
-                    f.write(f"    q{match.group(1)} = eval(f'DR.{match.group(1)}_{match.group(2)}{{loopid}}')\n")
+                    f.write(f"    {match.group(1)} = eval(f'DR.{match.group(1)}_{match.group(2)}{{loopid}}')\n")
                     write_question_validation(f, question, match.group(1))
                 else:
                     f.write(f"    # {qid}\n")
@@ -99,9 +99,9 @@ def write_question_validation(f, question, qid):
     if question['qtype'] == QUESTIONTYPES.SINGLE:
         f.write(f"    {qid}.validatesingle(valid_values=np.arange(1, 3), allowblanks=False, condition=True)\n\n")
     elif question['qtype'] == QUESTIONTYPES.MULTI:
-        f.write(f"    {qid}.validatemulti(at_least=1, at_most=99, allowblanks=False, condition=True)\n\n")
+        f.write(f"    {qid}.validatemulti(exclusive_cols=[],at_least=1, at_most=99, allowblanks=False, condition=True)\n\n")
     elif question['qtype'] == QUESTIONTYPES.NUMERIC:
-        f.write(f"    {qid}.validatenumric(range_param=(0, 100), allowblanks=False, condition=True)\n\n")
+        f.write(f"    {qid}.validatenumeric(range_param=(0, 100), allowblanks=False, condition=True)\n\n")
     elif question['qtype'] == QUESTIONTYPES.TEXT:
         f.write(f"    {qid}.validatetext(required=1, allowblanks=False, condition=True)\n\n")
     elif question['qtype'] == QUESTIONTYPES.NONE:

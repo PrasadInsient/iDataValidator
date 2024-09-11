@@ -6,7 +6,7 @@ from logs import adderror
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
 def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, optional_cols: List[str] = [], 
-                    exclude_cols: List[str] = [], exclusive_cols: List[str] = [], at_least: int = 1, 
+                    exclusive_cols: List[str] = [], ignore_cols: List[str] = [], at_least: int = 1, 
                     at_most: int = -1, allowblanks: bool = False, required: int = 1, condition: bool = True, 
                     range_param: RangeTuple = (0, 100)):
     """
@@ -19,7 +19,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
         datacols (List[str]): A list of column names to be checked for valid numeric values.
         datarow (pd.Series): A single row from a pandas DataFrame, where the numeric validation is performed.
         optional_cols (List[str], optional): A list of columns where blank values are allowed. Defaults to an empty list.
-        exclude_cols (List[str], optional): A list of columns to exclude from the numeric validation. These columns 
+        ignore_cols (List[str], optional): A list of columns to exclude from the numeric validation. These columns 
                                             are removed from `datacols` before the check is performed. Defaults to an empty list.
         exclusive_cols (List[str], optional): Columns that should behave exclusively (i.e., only one can be selected).
                                               Defaults to an empty list.
@@ -58,7 +58,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
             datacols.append(col)
 
     # Remove any excluded columns from datacols
-    for col in exclude_cols:
+    for col in ignore_cols:
         if col in datacols:
             datacols.remove(col)
 

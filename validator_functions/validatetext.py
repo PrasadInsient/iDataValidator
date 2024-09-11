@@ -2,14 +2,14 @@ import re
 import pandas as pd
 from logs import adderror
 
-def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclude_cols=[],exclusive_cols=[],
+def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclusive_cols=[],ignore_cols=[],
                  at_least=1, at_most=-1,txt_mnlen=1,txt_mxlen=None,allowblanks=False,required=1,condition=True):
     datarow = datarow.copy()
 
     for col in exclusive_cols:
         if col not in datacols: datacols.append(col)
 
-    for col in exclude_cols:
+    for col in ignore_cols:
         if col not in datacols: datacols.remove(col)
 
     if condition:

@@ -21,73 +21,81 @@ class Question:
         self.oecols:List[str] = oecols
         self.parent_record = parent_record
 
-    def is_first_record(self) -> bool:
-        """
-        Check if the current datarow is the first record in the dataset.
-        This assumes `parent_record.row` contains row data and `parent_record` has an index or a reference to the entire dataset.
-        """
-        if hasattr(self.parent_record, 'index'):
-            return self.parent_record.index == 0  # Assumes `index` starts at 0 for the first record
-        elif hasattr(self.parent_record, 'row_number'):
-            return self.parent_record.row_number == 1  # Assumes `row_number` is 1-based
-
-        return False
-
-    def validate(self,qtype=QUESTIONTYPES.SINGLE,valid_values: list = [0,1], optional_cols: list = [], exclude_cols: list = [], exclusive_cols: list = [],range_param=(0,100),at_least: int = 1, at_most: int = -1, txt_mnlen=1,txt_mxlen:Any=None,allowblanks: bool = False, required: int = 1, condition: bool = True):
-        datarow = self.parent_record.row
-
-        if self.is_first_record():
-            if qtype != self.type:
-                adderror(0,self.id,0,"Question type mismatch.")
+    def validate(self,qtype=QUESTIONTYPES.SINGLE,valid_values = [0,1], optional_cols: list = [],  exclusive_cols: list = [],
+                 ignore_cols: list = [],range_param=(0,100),at_least: int = 1, at_most: int = -1, txt_mnlen=1,txt_mxlen:Any=None,
+                 allowblanks: bool = False, required: int = 1, condition: bool = True):
 
         if qtype==QUESTIONTYPES.SINGLE:
-            self.validatesingle(valid_values,optional_cols,exclude_cols,allowblanks,condition)
+            self.validatesingle(valid_values,optional_cols,ignore_cols,allowblanks,condition)
 
         if qtype==QUESTIONTYPES.MULTI:
-            self.validatemulti(valid_values,optional_cols,exclude_cols,exclusive_cols,at_least,at_most,allowblanks,required,condition)
+            self.validatemulti(valid_values,optional_cols,exclusive_cols,ignore_cols,at_least,at_most,allowblanks,required,condition)
 
         if qtype==QUESTIONTYPES.NUMERIC:
-            self.validatenumeric(optional_cols,exclude_cols,exclusive_cols,range_param,at_least,at_most,allowblanks,required,condition)
+            self.validatenumeric(optional_cols,exclusive_cols,ignore_cols,range_param,at_least,at_most,allowblanks,required,condition)
 
         if qtype==QUESTIONTYPES.TEXT:
-            self.validatesingle(optional_cols,exclude_cols,exclusive_cols,at_least,at_most,txt_mnlen,txt_mxlen,allowblanks,required,condition) # type: ignore
+            self.validatesingle(optional_cols,exclusive_cols,ignore_cols,at_least,at_most,txt_mnlen,txt_mxlen,allowblanks,required,condition) # type: ignore
 
-    def validatesingle(self,valid_values, optional_cols: list = [], exclude_cols: list = [], allowblanks: bool = False, required: int = 1, condition: bool = True):
+
+    def validatesingle(self,valid_values, optional_cols: list = [], ignore_cols: list = [], allowblanks: bool = False, required: int = 1, condition: bool = True):
+
         datarow = self.parent_record.row
-        validatesingle(self.id,self.datacols,datarow,valid_values,optional_cols,exclude_cols,allowblanks,condition)
+        validatesingle(self.id,self.datacols,datarow,valid_values,optional_cols,ignore_cols,allowblanks,condition)
 
 
-    def validatemulti(self,valid_values: list = [0,1], optional_cols: list = [], exclude_cols: list = [], exclusive_cols: list = [],at_least: int = 1, at_most: int = -1, allowblanks: bool = False, required: int = 1, condition: bool = True):
+    def validatemulti(self,valid_values: list = [0,1], optional_cols: list = [], exclusive_cols: list = [],ignore_cols: list = [],at_least: int = 1, at_most: int = -1, allowblanks: bool = False, required: int = 1, condition: bool = True):
+
         datarow = self.parent_record.row
-        validatemulti(self.id,self.datacols,datarow,valid_values,optional_cols,exclude_cols,exclusive_cols,
+        validatemulti(self.id,self.datacols,datarow,valid_values,optional_cols,exclusive_cols,ignore_cols,
                       at_least,at_most,allowblanks,required,condition)
 
-    def validatenumeric(self, optional_cols: list = [], exclude_cols: list = [], exclusive_cols: list = [],range_param=(0,100),at_least: int = 1, at_most: int = -1, allowblanks: bool = False, required: int = 1, condition: bool = True):
+    def validatenumeric(self, optional_cols: list = [], exclusive_cols: list = [],ignore_cols: list = [],range_param=(0,100),at_least: int = 1, at_most: int = -1, allowblanks: bool = False, required: int = 1, condition: bool = True):
         datarow = self.parent_record.row
-        validatenumeric(self.id,self.datacols,datarow,optional_cols,exclude_cols,exclusive_cols,
+        validatenumeric(self.id,self.datacols,datarow,optional_cols,exclusive_cols,ignore_cols,
                       at_least,at_most,allowblanks,required,condition,range_param)
 
-    def validatetext(self,optional_cols: list = [], exclude_cols: list = [], exclusive_cols: list = [],at_least: int = 1, at_most: int = -1, txt_mnlen=1,txt_mxlen:Any=None,allowblanks: bool = False, required: int = 1, condition: bool = True):
+    def validatetext(self,optional_cols: list = [],  exclusive_cols: list = [],ignore_cols: list = [],at_least: int = 1, at_most: int = -1, txt_mnlen=1,txt_mxlen:Any=None,allowblanks: bool = False, required: int = 1, condition: bool = True):
         datarow = self.parent_record.row
-        validatetext(self,self.datacols,datarow,optional_cols,exclude_cols,exclusive_cols,
+        validatetext(self,self.datacols,datarow,optional_cols,exclusive_cols,ignore_cols,
                      at_least,at_most,txt_mnlen,txt_mxlen,allowblanks,required,condition)
 
-    def checksum(self,exclude_cols: list = [], condition: bool = True, sum_condition: str = '=100'):
+    def checksum(self,ignore_cols: list = [], sum_condition: str = '=100', condition: bool = True):
         datarow = self.parent_record.row
-        checksum(self.id,self.datacols,datarow,exclude_cols,condition,sum_condition)
+        checksum(self.id,self.datacols,datarow,sum_condition,ignore_cols,condition)
 
-    def checksum100(self,exclude_cols: list = [], condition: bool = True):
+    def checksum100(self,ignore_cols: list = [], sum_condition: str = '=100',condition: bool = True):
         datarow = self.parent_record.row
-        checksum100(self.id,self.datacols,datarow,exclude_cols,condition)
+        checksum100(self.id,self.datacols,datarow,sum_condition,ignore_cols,condition)
 
-    def checkrank(self,min_rank_value: int = 1, max_rank_value: Optional[int] = None, exclude_cols: list = [], condition: bool = True):
+    def checkrank(self,min_rank_value: int = 1, max_rank_value: Optional[int] = None, ignore_cols: list = [], condition: bool = True):
         datarow = self.parent_record.row
-        checkrank(self.id,self.datacols,datarow,min_rank_value,max_rank_value,exclude_cols,condition)
+        checkrank(self.id,self.datacols,datarow,min_rank_value,max_rank_value,ignore_cols,condition)
 
-    def checkblanks(self, exclude_cols: list = [], condition: bool = True):
+    def checkblanks(self, ignore_cols: list = [], condition: bool = True):
         datarow = self.parent_record.row
-        checkblanks(self.id,self.datacols,datarow,exclude_cols,condition)
+        checkblanks(self.id,self.datacols,datarow,ignore_cols,condition)
 
-    def checknonblanks(self, exclude_cols: list = [], condition: bool = True):
+    def checknonblanks(self, ignore_cols: list = [], condition: bool = True):
         datarow = self.parent_record.row
-        checknonblanks(self.id,self.datacols,datarow,exclude_cols,condition)
+        checknonblanks(self.id,self.datacols,datarow,ignore_cols,condition)
+
+
+    def checkexclusive(self, questionid: str, datacols: list, exclusive_cols: list = [], 
+                   iszerovalid: bool = True, condition: bool = True, oneway: bool = False):
+        datarow = self.parent_record.row
+        checkexclusive(questionid, datacols, datarow, exclusive_cols,iszerovalid, condition, oneway)
+
+    def checkmasking(self,maskcond_cols: List[str],maskcondition: str ="=1",  always_showcols: List[str]=[], condition= True):
+        datarow = self.parent_record.row
+        checkmasking(self.id, datarow, self.datacols,maskcond_cols,maskcondition,always_showcols,condition)
+
+    def backchecksingle(self,cols_to_check: List[str],backcheckcondition: str, condition: bool = True):
+        datarow = self.parent_record.row
+        backchecksingle(self.id, datarow,self.datacols[0],cols_to_check, backcheckcondition, condition)
+
+    def backcheckmulti(self,cols_to_check: List[str],backcheckcondition: str ="=1",  
+        always_showcols: List[str]=[],ignoresourcecols:List[str]=[],ignoretargetcols:List[str]=[],condition= True):
+        datarow = self.parent_record.row
+        backcheckmulti(self.id,  datarow, self.datacols,cols_to_check,backcheckcondition,
+                       always_showcols,ignoresourcecols,ignoretargetcols,condition)

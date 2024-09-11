@@ -6,7 +6,7 @@ parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 sys.path.insert(0, parent_dir)
 
 
-import validator_functions.question_validator_functions
+import validator_functions
 from docx import Document
 from docx.shared import Pt
 from docx.oxml.ns import qn
@@ -42,4 +42,4 @@ def create_document(module):
 
     doc.save('documentation.docx')
 
-create_document(validator_functions.question_validator_functions)
+create_document(validator_functions)

@@ -1,7 +1,7 @@
 import pandas as pd
 from logs import adderror
 
-def checksum(questionid: str, datacols: list, datarow: pd.Series, exclude_cols: list = [], condition: bool = True, sum_condition: str = '=100'):
+def checksum(questionid: str, datacols: list, datarow: pd.Series, sum_condition: str = '=100', ignore_cols: list = [], condition: bool = True):
     """
     Perform a sum check on specified columns in a row of survey data. The function checks if the sum of the values in 
     `datacols` meets the condition specified in `sum_condition` (e.g., '=100', '<50', '>20', 'range(90,110)').
@@ -10,7 +10,7 @@ def checksum(questionid: str, datacols: list, datarow: pd.Series, exclude_cols: 
         questionid (str): The ID of the question being checked (used for logging purposes).
         datacols (list): A list of column names whose values will be summed.
         datarow (pd.Series): A single row from a pandas DataFrame, where the sum check is performed.
-        exclude_cols (list, optional): A list of column names to exclude from the sum calculation. These columns 
+        ignore_cols (list, optional): A list of column names to exclude from the sum calculation. These columns 
                                        are removed from `datacols` before the check is performed. Defaults to an empty list.
         condition (bool, optional): A flag to enable or disable the check. If `True`, the sum check is performed. 
                                     If `False`, the function does nothing. Defaults to `True`.
@@ -44,7 +44,7 @@ def checksum(questionid: str, datacols: list, datarow: pd.Series, exclude_cols: 
     datarow = datarow.copy()
 
     # Remove any excluded columns from datacols
-    for col in exclude_cols:
+    for col in ignore_cols:
         if col in datacols:
             datacols.remove(col)
 

@@ -3,8 +3,8 @@ import pandas as pd
 from typing import List, Optional, Any
 from .checkcondition import checkcondition
 
-def backcheck_single(questionid: str, qcol: str, datarow: pd.Series, cols_to_check: List[str], 
-                     maskcondition: str, condition: bool = True):
+def backchecksingle(questionid: str, datarow: pd.Series,qcol: str,  cols_to_check: List[str], 
+                     backcheckcondition: str, condition: bool = True):
     """
     Perform a backcheck on a single question in a survey data row. This function verifies the value of a specified column
     (`qcol`) and checks whether the corresponding value in `cols_to_check` satisfies a given condition.
@@ -27,7 +27,7 @@ def backcheck_single(questionid: str, qcol: str, datarow: pd.Series, cols_to_che
         # Columns in 'cols_to_check' are ['col1', 'col2'] and the question column is 'qcol'.
         # Check if the value in the corresponding column (cols_to_check[source - 1]) satisfies the condition '> 10'.
         
-        backcheck_single('Q1', 'qcol', datarow, ['col1', 'col2'], maskcondition='> 10')
+        backchecksingle('Q1', 'qcol', datarow, ['col1', 'col2'], maskcondition='> 10')
 
     """
     
@@ -38,9 +38,9 @@ def backcheck_single(questionid: str, qcol: str, datarow: pd.Series, cols_to_che
             target_value = datarow[cols_to_check[question_val - 1]]  # Get value from cols_to_check[source-1]
         
             # Check if the target_value satisfies the maskcondition
-            if not checkcondition(target_value, maskcondition):
+            if not checkcondition(target_value, backcheckcondition):
                 # Log an error if the condition is not satisfied
                 adderror(datarow['record'], questionid, target_value, f"Backcheck single failed")
         else:
             # Log an error if the question_val is out of bounds for cols_to_check
-            adderror(datarow['record'], questionid, question_val, f"Backcheck single - Invalid question value: Out of bounds.")
+            adderror(datarow['record'], questionid, question_val, f"Backcheck single failed")

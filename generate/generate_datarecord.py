@@ -16,13 +16,13 @@ def generate_datarecord(DATA_MAP_PATH:str,DATA_PATH:str):
     try:
         with open(survey_file, 'w') as f:
             f.write("from .question import Question\n")
-            f.write("from .questions import Questions\n")
-            f.write("from .columns import Columns\n") 
+            f.write("from .datarecordbase import DataRecordBase\n") 
             f.write("from typing import List\n")
             f.write("import pandas as pd\n")
             f.write("from config import *\n")
-            f.write("class DataRecord:\n")
+            f.write("class DataRecord(DataRecordBase):\n")
             f.write("    def __init__(self,row:pd.Series):\n")
+            f.write(f"        super().__init__()\n")
             f.write(f"        self.row = row\n")
             for question in questions:
                 qid = question['qlabel']
