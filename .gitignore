@@ -1,5 +1,6 @@
 # Ignore Python bytecode files
 *.pyc
 *.docx
+.DS_store
 # Ignore __pycache__ directories
 __pycache__/
