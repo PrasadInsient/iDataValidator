@@ -15,3 +15,4 @@ from .validatenumeric import validatenumeric
 from .vwcheck import vwcheck
 from .checkcompselection import checkcompselection
 from .checkmaxdiff import checkmaxdiff
+from .checkGG import checkonewayGG, checktwowayGG
