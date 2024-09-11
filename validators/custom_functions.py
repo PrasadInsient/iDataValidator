@@ -5,10 +5,12 @@ import numpy as np
 import re
 from validator_functions import *
 import numpy as np
-from logs import Error,adderror,ErrorLog
+from logs import Error, adderror, ErrorLog
 
 
 '''
+added comment 
+
 def S7_validator(row:pd.Series):
     s6 = row['S6']
     s7_sum = row[QUESTIONS.S7.datacols].sum()
