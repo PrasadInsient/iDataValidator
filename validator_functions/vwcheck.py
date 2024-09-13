@@ -2,7 +2,13 @@ import pandas as pd
 from logs import adderror
 from typing import List, Union, Tuple, Optional
 
-from survey_model import *
+class Question:
+    def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
+        self.id:str = id
+        self.type:str = type
+        self.datacols:List[str] = datacols
+        self.oecols:List[str] = oecols
+        self.parent_record = parent_record
 
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
