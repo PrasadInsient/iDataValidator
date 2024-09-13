@@ -23,7 +23,7 @@ def checktwowayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                 elif dir==1:
                     valid_values=range(1,pGGval+1)
                 else:
-                    valid_values=range(pGGval,5)
+                    valid_values=range(pGGval,6)
 
                 price = GGprices[priceindex]
                 GGselection = datarow[GGqcol]
@@ -86,7 +86,7 @@ def checkonewayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                 elif dir==1:
                     valid_values=range(1,pGGval+1)
                 else:
-                    valid_values=range(pGGval,5)
+                    valid_values=range(pGGval,6)
 
                 price = GGprices[priceindex]
                 GGselection = datarow[GGqcol]

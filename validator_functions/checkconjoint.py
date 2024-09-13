@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from logs import adderror
 from config import *
 def checkconjoint(datarow, conjointdesign, conjointq, hattrq, no_tasks, no_options, version,condition):

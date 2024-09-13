@@ -1,6 +1,7 @@
 import pandas as pd
 from logs import adderror
 from typing import List
+from survey_model import Question
 
 def vwcheck(questionid: str, datarow: pd.Series, VW_cols: List[str], condition: bool = True):
     """
