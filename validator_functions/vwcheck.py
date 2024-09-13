@@ -2,15 +2,10 @@ import pandas as pd
 from logs import adderror
 from typing import List, Union, Tuple, Optional
 
+from survey_model import *
+
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
-class Question:
-    def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
-        self.id:str = id
-        self.type:str = type
-        self.datacols:List[str] = datacols
-        self.oecols:List[str] = oecols
-        self.parent_record = parent_record
 
 def slice_columns(question, num_elements):
     """
@@ -90,7 +85,25 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                 if any(pd.isnull(col) for col in col_data):
                     adderror(datarow['record'], col_idx, col_data, "VW data have blanks.")
 
-  
+                    
+                # For the last question, check if the order is correct
+                if i == len(VW_questions) - 1:
+                    # Perform the order validation based on OrderType
+                    for k in range(len(col_data) - 1):
+                        if OrderType == 2 or len(VW_questions)<4:
+                            # Ensure increasing order
+                            if datarow[col_data[k]] >= datarow[col_data[k + 1]]:
+                                adderror(datarow['record'], col_data[k], datarow[col_data[k]], "VW check failed.")
+                        else:
+                            # Ensure vw order (last < first)
+                            if k == len(col_data) - 2:
+                                if datarow[col_data[k + 1]] >= datarow[col_data[0]]:
+                                    adderror(datarow['record'], col_data[k + 1], datarow[col_data[k + 1]], "VW check failed.")
+                            else:
+                                if datarow[col_data[k]] >= datarow[col_data[k + 1]]:
+                                    adderror(datarow['record'], col_data[k], datarow[col_data[k]], "VW check failed.")
+
+    
             # Cross-check logic for data columns between vw_data lists
             # Cross-check first data column between vw_data[0], vw_data[1], vw_data[2], vw_data[3] (if applicable)
             for i in range(1, len(vw_data)):
@@ -117,22 +130,6 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                     if not all(d3 == d4 for d3, d4 in zip(third_data_col_vw3, third_data_col_vw4) if not pd.isnull(d3) and not pd.isnull(d4)):
                         adderror(datarow['record'], col_idx, third_data_col_vw3, "Mismatch in third data column across questions")
 
-            # For the last question, check if the order is correct
-            if i == len(VW_questions) - 1:
-                # Perform the order validation based on OrderType
-                for i in range(len(col_data) - 1):
-                    if OrderType == 2 or len(VW_questions)<4:
-                        # Ensure increasing order
-                        if datarow[col_data[i]] >= datarow[col_data[i + 1]]:
-                            adderror(datarow['record'], col_data[i], datarow[col_data[i]], "VW check failed.")
-                    else:
-                        # Ensure looping order (last < first)
-                        if i == len(col_data) - 2:
-                            if datarow[col_data[i + 1]] >= datarow[col_data[0]]:
-                                adderror(datarow['record'], col_data[i + 1], datarow[col_data[i + 1]], "VW check failed.")
-                        else:
-                            if datarow[col_data[i]] >= datarow[col_data[i + 1]]:
-                                adderror(datarow['record'], col_data[i], datarow[col_data[i]], "VW check failed.")
     else:
         # Check if all datacols are not null
         for question in VW_questions:
