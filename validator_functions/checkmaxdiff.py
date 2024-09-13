@@ -40,8 +40,8 @@ def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options,
         df_design_maxdiff = pd.read_csv(designfile_path)
 
         for task in range(1, no_tasks + 1):
-            mostcol = f"{maxdiffq}_lr{task}c1"
-            leastcol = f"{maxdiffq}_lr{task}c2"
+            mostcol = f"{maxdiffq}_Lr{task}c1"
+            leastcol = f"{maxdiffq}_Lr{task}c2"
 
             # Check if the two MaxDiff columns have the same values
             if datarow[mostcol] == datarow[leastcol]:
@@ -58,6 +58,6 @@ def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options,
 
             # Validate each option based on hAttrQ
             for opt in range(1, no_options + 1):
-                attr_col = f"{hattrq}_{task}r{opt}"
+                attr_col = f"{hattrq}_Lr{task}{opt}"
                 if datarow[attr_col] != listX[opt - 1]:  # Check if each attribute matches the design
                     adderror(datarow['record'], maxdiffq, task,f"MaxDiff design error for option")
