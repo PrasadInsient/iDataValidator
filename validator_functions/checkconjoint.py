@@ -14,28 +14,27 @@ def checkconjoint(datarow, conjointdesign,row_headers, conjointq, hattrq, no_tas
     
     conjointdesign : str
         Filename of the conjoint design CSV file, used to validate the respondent's answers.
-
-
-    row_headers=['Att 1','Att 2','Att 3','Att 4','Att 5','Att 6','Att 7']
-    
+    row_headers= List[str]
+        Array of Column headers from the design file ex: ['Att 1','Att 2','Att 3','Att 4','Att 5','Att 6','Att 7']
     conjointq : str
-        Base question ID or identifier for the conjoint task questions in the dataset.
+        Conjoint Question id. Please pass without the Loopvar:label for ex: "Q_Conjoint"
     
     hattrq : str
-        Base question ID or identifier for the conjoint attributes in the dataset.
+        Hidden question ID for the conjoint attributes in the dataset. for ex: "hAttr", It will works only if we give attribute labels in 
+        Sequential order.
     
     no_tasks : int
-        Number of tasks in the conjoint exercise (e.g., 12 tasks).
+        Number of tasks/loops in the conjoint exercise (e.g., 12 tasks).
     
     no_options : int
-        Number of possible options per task (e.g., 3 options for each task).
+        Number of possible options per screen (e.g., 4 options for each task).
     
     version : int
         The version of the conjoint survey design that the respondent was assigned.
     
     condition : bool
-        Determines whether to perform full validation or just a check for blank entries.
-
+        Asking condition for the conjoint.
+        
     Functionality:
     --------------
     - If `condition` is True:

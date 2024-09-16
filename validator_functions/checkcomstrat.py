@@ -12,32 +12,30 @@ def checkcomstrat(
     condition: bool = True
 ) -> None:
     """
-    Checks a strategy compliance for a given data row.
+    Checks a comstrat question for a given data row.
 
     Parameters:
     -----------
     datarow : pd.Series
         A pandas Series representing a row of data.
     comstrat_qid_cols : List[str]
-        List of column names representing the compliance strategy question IDs.
+        List of starrating question columns (please make sure this works only if grouping=Cols is not mentioned in the question).
     masking_cols : List[str]
-        List of column names representing the masking strategy.
+        List of masking multi question columns.
     range_param : Tuple[Union[int, float], Union[int, float]], optional
         A tuple specifying the valid range for the compliance strategy values, default is (1, 7).
     condition : bool, optional
         A condition to control whether to apply the masking strategy, default is True.
 
-    Returns:
-    --------
-    None
-        The function logs errors using `adderror` if the compliance strategy checks fail.
-
-    Errors:
-    -------
-    - Logs an 'Invalid Value' error if a masked column is 1 but the value in the corresponding compliance strategy column is not in the valid range.
-    - Logs a 'Blank check failed' error if the value in a compliance strategy column is not blank where it should be.
-
+    checkcomstrat(
+    datarow: row, 
+    comstrat_qid_cols: [QUESTIONS.Comstrat.datacols], 
+    masking_cols: [QUESTIONS.hComstrat.datacols], 
+    range_param: np.arange(1,7), 
+    condition: bool = True
+)
     """
+    
     if condition:
         no_of_cols = len(masking_cols)
         datacols_2d = [comstrat_qid_cols[i:i + no_of_cols] for i in range(0, len(comstrat_qid_cols), no_of_cols)]
