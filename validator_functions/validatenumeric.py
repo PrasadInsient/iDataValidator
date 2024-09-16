@@ -65,6 +65,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
     if condition:
         no_selections = 0
         no_exclusive_selections = 0
+        no_non_exclusive_selections=0
 
         # Loop through the columns to validate the numeric values
         for column in datacols:
@@ -80,6 +81,8 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
                 no_selections += 1
                 if column in exclusive_cols:
                     no_exclusive_selections += 1
+                else:
+                    no_non_exclusive_selections += 1
 
         # Check for at least one required valid value
         if required and no_selections == 0:
@@ -95,7 +98,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
                 adderror(datarow['record'], questionid, no_selections, 'Numeric at most N check failed.')
 
         # Check if both exclusive and non-exclusive selections were made
-        if no_selections > 0 and no_exclusive_selections > 0:
+        if no_non_exclusive_selections > 0 and no_exclusive_selections > 0:
             adderror(datarow['record'], questionid, no_selections, 'Numeric exclusive check failed.')
 
     # If condition is False, perform only a blank check

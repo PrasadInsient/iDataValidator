@@ -58,6 +58,7 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
     if condition:
         no_selections = 0
         no_exclusive_selections = 0
+        no_non_exclusive_selections=0
 
         # Loop through the columns to validate the selections
         for column in datacols:
@@ -70,6 +71,8 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
             if pd.notnull(datarow[column]) and datarow[column] == 1:
                 if column in exclusive_cols:
                     no_exclusive_selections += 1
+                else:
+                    no_non_exclusive_selections += 1
                 no_selections += 1
 
         # Check for at least one required selection
@@ -86,7 +89,7 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
                 adderror(datarow['record'], questionid, no_selections, 'Multi at most N check failed.')
 
         # Check if both exclusive and non-exclusive selections were made
-        if no_selections > 0 and no_exclusive_selections > 0:
+        if no_non_exclusive_selections > 0 and no_exclusive_selections > 0:
             adderror(datarow['record'], questionid, no_selections, 'Multi exclusive check failed.')
 
     # If condition is False, perform only a blank check
