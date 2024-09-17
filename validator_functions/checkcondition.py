@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 def checkcondition(value, condition: str) -> bool:
     """
     Checks if a given value satisfies a condition based on various operators such as '=', 'in', 'range', '>', '<', etc.
@@ -16,6 +19,9 @@ def checkcondition(value, condition: str) -> bool:
     Returns:
         bool: True if the value satisfies the condition, False otherwise.
     """
+    if pd.isna(value) or not value:
+        return False
+    
     # Check if condition starts with '=' and compare value for equality
     if condition.startswith('='):
         return value == int(condition[1:])
@@ -28,6 +34,13 @@ def checkcondition(value, condition: str) -> bool:
         except ValueError:
             return False
     
+    elif condition.startswith('in '):
+        try:
+            values = list(map(int, condition[3:].strip()[1:-1].split(',')))
+            return value in values
+        except ValueError:
+            return False
+
     # Check if condition is a 'range' and test if value falls within the range
     elif condition.startswith('range'):
         try:

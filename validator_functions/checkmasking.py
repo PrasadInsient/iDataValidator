@@ -14,7 +14,7 @@ class Question:
         self.parent_record = parent_record
 
 def checkmasking(questionid,datarow:pd.Series,question_cols: Union[List[str],Question], maskcond_cols: Union[List[str],Question], 
-                 maskcondition: str ="=1",  always_showcols: Union[str,List[str]]=[], condition= True):
+                 maskcondition: str ="=1",  always_showcols: Union[str,List[str]]=[],asciimq=False,condition= True):
 
     
     """
@@ -65,8 +65,12 @@ def checkmasking(questionid,datarow:pd.Series,question_cols: Union[List[str],Que
             always_showcols=[always_showcols]
 
         # Exclude columns in always_showcols from question_cols
+        if not asciimq:
+            question_cols = [col for col in question_cols if col not in always_showcols]
 
-        question_cols = [col for col in question_cols if col not in always_showcols]
+        if len(question_cols) != len(maskcond_cols):
+            raise ValueError(f"Length mismatch: question_cols has {len(question_cols)} elements, "
+                     f"but maskcond_cols has {len(maskcond_cols)} elements.")
         
         # Perform the regular masking check on question_cols and maskcond_cols
         for q_col, m_col in zip(question_cols, maskcond_cols):
