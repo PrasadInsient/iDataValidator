@@ -1,17 +1,22 @@
 import pandas as pd
+import numpy as np
 from .columns import Columns
 from .questions import Questions
 from .questiontypes import QuestionTypes
 
 def convert_column(column):
-    # Check if the column can be converted to Int64
+    # Replace any pd.NA with np.nan
+    column = column.replace({pd.NA: np.nan})
+    
     try:
-        # Drop NaN values and check if the remaining are integers
-        if pd.Series(column.dropna()).apply(lambda x: float(x).is_integer()).all():
+        # Check if all non-NaN values are integers by verifying if x % 1 == 0 for each value
+        if column.dropna().apply(lambda x: x % 1 == 0).all():
+            # Convert the column to Int64 if all values are integers
             return column.astype('Int64')
         else:
             return column
-    except ValueError:
+    except (ValueError, TypeError):
+        # If there's an error, return the original column without changes
         return column
 
 DATA = pd.DataFrame()
