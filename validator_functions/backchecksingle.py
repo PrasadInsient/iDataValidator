@@ -1,9 +1,18 @@
 from logs import adderror
 import pandas as pd
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Union
 from .checkcondition import checkcondition
 
-def backchecksingle(questionid: str, datarow: pd.Series,qcol: str,  cols_to_check: List[str], 
+
+class Question:
+    def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
+        self.id:str = id
+        self.type:str = type
+        self.datacols:List[str] = datacols
+        self.oecols:List[str] = oecols
+        self.parent_record = parent_record
+
+def backchecksingle(questionid: str, datarow: pd.Series,qcol: str,  cols_to_check: Union[List[str],Question], 
                      backcheckcondition: str, condition: bool = True):
     """
     Perform a backcheck on a single question in a survey data row. This function verifies the value of a specified column
@@ -33,6 +42,9 @@ def backchecksingle(questionid: str, datarow: pd.Series,qcol: str,  cols_to_chec
     
     if condition:       
         question_val = datarow[qcol]  # Extract the value from qcol (usually a numeric value representing a choice)
+        
+        if isinstance(cols_to_check, Question):
+            cols_to_check = cols_to_check.datacols
         
         if question_val - 1 < len(cols_to_check):
             target_value = datarow[cols_to_check[question_val - 1]]  # Get value from cols_to_check[source-1]
