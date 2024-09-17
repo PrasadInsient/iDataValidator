@@ -49,4 +49,4 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
             adderror(datarow['record'], questionid, no_selections, 'Text exclusive check failed.')
 
     else:
-        checkblanks(questionid,datacols,datarow)
+        checkblanks(questionid,datacols,datarow)        
