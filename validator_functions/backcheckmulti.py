@@ -66,7 +66,7 @@ def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: Union[List
             always_showcols=[always_showcols]
 
         # Exclude columns in always_showcols from question_cols
-        question_cols = [col for col in question_cols if col not in always_showcols and col not in ignoretargetcols]
+        question_cols = [col for col in question_cols if col not in always_showcols and col not in ignoretargetcols] #type:ignore
 
         cols_to_check = [col for col in cols_to_check if col not in ignoresourcecols]
         
@@ -77,6 +77,6 @@ def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: Union[List
                 adderror(datarow['record'], questionid, datarow[q_col], f"Backcheck multi failed")
 
         # Check the always_showcols to ensure they always have a value (not null)
-        for col in always_showcols:
+        for col in always_showcols: #type:ignore
             if pd.isna(datarow[col]):
                 adderror(datarow['record'], questionid, datarow[col], f"Backcheck multi failed")
