@@ -18,3 +18,5 @@ from .checkmaxdiff import checkmaxdiff
 from .checkGG import checkonewayGG, checktwowayGG
 from .checkcomstrat import checkcomstrat
 from .checkconjoint import checkconjoint
+from .isblank import isblank
+from .isnotblank import isnotblank
