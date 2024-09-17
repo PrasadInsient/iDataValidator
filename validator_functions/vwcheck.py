@@ -82,15 +82,15 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                 if maskingQID:
                     mask_value = datarow[maskingQID.datacols[col_idx]]
                     if mask_value < maskQIDvalue:
-                        if any(not pd.isnull(col) for col in col_data):
+                        if any(not pd.isnull(datarow[col]) for col in col_data):
                             adderror(datarow['record'], col_idx, col_data, "VW blank check failed.")
                         continue
 
                 # Range check for each column's data
-                if not all(range_param[0] <= val <= range_param[1] for val in col_data if not pd.isnull(val)):
+                if not all(range_param[0] <= datarow[val] <= range_param[1] for val in col_data if not pd.isnull(datarow[val])):
                     adderror(datarow['record'], col_idx, col_data, f"Value out of range: {range_param}")
 
-                if any(pd.isnull(col) for col in col_data):
+                if any(pd.isnull(datarow[col]) for col in col_data):
                     adderror(datarow['record'], col_idx, col_data, "VW data have blanks.")
 
                     
@@ -118,7 +118,7 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                 if len(vw_data[i]) > 0 and len(vw_data[0]) > 0:
                     first_data_col_vw1 = vw_data[0][col_idx] if col_idx < len(vw_data[0]) else []
                     first_data_col_vw2 = vw_data[i][col_idx] if col_idx < len(vw_data[i]) else []
-                    if not all(d1 == d2 for d1, d2 in zip(first_data_col_vw1, first_data_col_vw2) if not pd.isnull(d1) and not pd.isnull(d2)):
+                    if not all(datarow[d1] == datarow[d2] for d1, d2 in zip(first_data_col_vw1, first_data_col_vw2) if not pd.isnull(datarow[d1]) and not pd.isnull(datarow[d2])):
                         adderror(datarow['record'], col_idx, first_data_col_vw1, "Mismatch in first data column across questions")
 
             # Cross-check second data column between vw_data[1] and vw_data[2], vw_data[3] (if applicable)
@@ -127,7 +127,7 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                     if len(vw_data[i]) > 1 and len(vw_data[1]) > 1:
                         second_data_col_vw2 = vw_data[1][col_idx] if col_idx < len(vw_data[1]) else []
                         second_data_col_vw3 = vw_data[i][col_idx] if col_idx < len(vw_data[i]) else []
-                        if not all(d2 == d3 for d2, d3 in zip(second_data_col_vw2, second_data_col_vw3) if not pd.isnull(d2) and not pd.isnull(d3)):
+                        if not all(datarow[d2] == datarow[d3] for d2, d3 in zip(second_data_col_vw2, second_data_col_vw3) if not pd.isnull(datarow[d2]) and not pd.isnull(datarow[d3])):
                             adderror(datarow['record'], col_idx, second_data_col_vw2, "Mismatch in second data column across questions")
 
             # Cross-check third data column between vw_data[2] and vw_data[3] (if applicable)
@@ -135,7 +135,7 @@ def vwcheck(datarow: pd.Series, VW_questions: List[Question], range_param: Range
                 if len(vw_data[2]) > 2 and len(vw_data[3]) > 2:
                     third_data_col_vw3 = vw_data[2][col_idx] if col_idx < len(vw_data[2]) else []
                     third_data_col_vw4 = vw_data[3][col_idx] if col_idx < len(vw_data[3]) else []
-                    if not all(d3 == d4 for d3, d4 in zip(third_data_col_vw3, third_data_col_vw4) if not pd.isnull(d3) and not pd.isnull(d4)):
+                    if not all(datarow[d3] == datarow[d4] for d3, d4 in zip(third_data_col_vw3, third_data_col_vw4) if not pd.isnull(datarow[d3]) and not pd.isnull(datarow[d4])):
                         adderror(datarow['record'], col_idx, third_data_col_vw3, "Mismatch in third data column across questions")
 
     else:
