@@ -1,5 +1,8 @@
 import pandas as pd
 from logs import adderror
+from isblank import isblank
+from isnotblank import isnotblank
+
 
 def checkblanks(questionid: str, datacols: list, datarow: pd.Series, ignore_cols: list = [], condition: bool = True):
     """
@@ -32,14 +35,20 @@ def checkblanks(questionid: str, datacols: list, datarow: pd.Series, ignore_cols
     """
     datarow = datarow.copy()  # Create a copy of the data row to avoid modifying the original
 
+    cols_to_check =[]
+    if isinstance(datacols, str):
+        cols_to_check=[datacols]
+    else:
+        cols_to_check =datacols
+
+
     # Remove excluded columns from the list of columns to check
     for col in ignore_cols:
-        if col in datacols:
-            datacols.remove(col)
+        if col in cols_to_check:
+            cols_to_check.remove(col)
 
     # Perform the blank check if the condition is true
     if condition:
-        for column in datacols:
-            # If a non-null value is found where a blank is expected, log an error
-            if not pd.isnull(datarow[column]):
+        for column in cols_to_check:
+            if isnotblank(datarow[column]):
                 adderror(datarow['record'], questionid, column, 'Blank check failed')

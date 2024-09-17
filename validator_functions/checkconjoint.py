@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 from logs import adderror
 from config import *
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
+
 def checkconjoint(datarow, conjointdesign,row_headers, conjointq, hattrq, no_tasks, no_options, version,condition):
     """
     Validates a respondent's conjoint data row against the predefined conjoint design.

@@ -1,5 +1,8 @@
 import pandas as pd
 from logs import adderror
+from validator_functions import checkblanks
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_values: list = [0,1], optional_cols: list = [], 
                 exclusive_cols: list = [], ignore_cols: list = [], at_least: int = 1, at_most: int = -1, 
@@ -94,6 +97,7 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
 
     # If condition is False, perform only a blank check
     else:
-        for column in datacols:
-            if not pd.isnull(datarow[column]):
-                adderror(datarow['record'], column, datarow[column], 'Blank check failed')
+        checkblanks(questionid,datacols,datarow)
+#        for column in datacols:
+#            if not pd.isnull(datarow[column]):
+#                adderror(datarow['record'], column, datarow[column], 'Blank check failed')

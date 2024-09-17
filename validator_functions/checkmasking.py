@@ -2,6 +2,8 @@ import pandas as pd
 from typing import  List, Optional, Union
 from logs import Error, ErrorLog,adderror
 from validator_functions.checkcondition import checkcondition
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank
 import pandas as pd
 
 
@@ -75,14 +77,14 @@ def checkmasking(questionid,datarow:pd.Series,question_cols: Union[List[str],Que
         # Perform the regular masking check on question_cols and maskcond_cols
         for q_col, m_col in zip(question_cols, maskcond_cols):
             # If a question column contains a value, but the mask condition is not satisfied, log an error
-            if not pd.isna(datarow[q_col]) and not checkcondition(datarow[m_col], maskcondition):
+            if isnotblank(datarow[q_col]) and not checkcondition(datarow[m_col], maskcondition):
                 adderror(datarow['record'], questionid, datarow[q_col], f"Masking check failed")
 
             # If a question column is empty but the mask condition is satisfied, log an error
-            if pd.isna(datarow[q_col]) and checkcondition(datarow[m_col], maskcondition):
+            if isblank(datarow[q_col]) and checkcondition(datarow[m_col], maskcondition):
                 adderror(datarow['record'], questionid, datarow[q_col], f"Masking check failed")
 
         # Check the always_showcols to ensure they always have a value (not null)
         for col in always_showcols:
-            if pd.isna(datarow[col]):
+            if isblank(datarow[col]):
                 adderror(datarow['record'], questionid, datarow[col], f"Masking check failed")

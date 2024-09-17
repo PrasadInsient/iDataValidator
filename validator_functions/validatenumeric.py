@@ -1,6 +1,10 @@
 import pandas as pd
 from typing import List, Union, Tuple
 from logs import adderror
+from validator_functions import checkblanks
+
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 # Define a type alias for the range parameter (min, max)
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
@@ -103,6 +107,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
 
     # If condition is False, perform only a blank check
     else:
-        for column in datacols:
-            if not pd.isnull(datarow[column]):
-                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
+        checkblanks(questionid,datacols,datarow)
+#        for column in datacols:
+#            if not pd.isnull(datarow[column]):
+#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')

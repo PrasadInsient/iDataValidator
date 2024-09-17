@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from logs import adderror
 from config import *
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options, version,condition):
     """
     Validate MaxDiff data for each task in a given row of data.

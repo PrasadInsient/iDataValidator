@@ -1,5 +1,7 @@
 import pandas as pd
 from logs import adderror
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def checksum(questionid: str, datacols: list, datarow: pd.Series, sum_condition: str = '=100', ignore_cols: list = [], condition: bool = True):
     """

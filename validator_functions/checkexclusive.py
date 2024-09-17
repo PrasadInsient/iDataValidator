@@ -1,5 +1,7 @@
 import pandas as pd
 from logs import adderror
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def checkexclusive(questionid: str, datacols: list, datarow: pd.Series, exclusive_cols: list = [], 
                    iszerovalid: bool = True, condition: bool = True, oneway: bool = False):
@@ -55,7 +57,7 @@ def checkexclusive(questionid: str, datacols: list, datarow: pd.Series, exclusiv
         # Loop through the columns and count selections
         for column in datacols:
             # Count valid selections based on iszerovalid
-            if pd.notnull(datarow[column]) and (iszerovalid or (not iszerovalid and datarow[column] != 0)):
+            if isnotblank(datarow[column]) and (iszerovalid or (not iszerovalid and datarow[column] != 0)):
                 if column in exclusive_cols:
                     no_exclusive_selections += 1
                 else:

@@ -1,6 +1,8 @@
 import pandas as pd
 from logs import adderror
 from typing import List, Union, Tuple, Optional
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 class Question:
     def __init__(self,id, type, parent_record,datacols=[],oecols=[]):

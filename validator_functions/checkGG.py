@@ -1,5 +1,7 @@
 import pandas as pd
 from logs import adderror
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank
 
 """
 Validates a respondent's GG data 
@@ -63,7 +65,7 @@ def checktwowayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                     adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Price mismatch")
                     return
 
-                if pd.isna(GGselection) or GGselection not in valid_values:
+                if isblank(GGselection) or GGselection not in valid_values:
                     adderror(datarow['record'], GGquestion, datarow[GGqcol], "GG - Invalid value")
                     return
 
@@ -86,14 +88,14 @@ def checktwowayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                         status = 0
 
             else:
-                if pd.notna(datarow[GGqcol]) or pd.notna(datarow[pricecol]):
+                if isnotblank(datarow[GGqcol]) or isnotblank(datarow[pricecol]):
                     adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Blank check failed")
                     return
     else:
         for itr in range(1, no_times + 1):
             pricecol = f"{priceq}_Lr{itr}"
             GGqcol = f"{GGquestion}_Lr{itr}"
-            if pd.notna(datarow[GGqcol]) or pd.notna(datarow[pricecol]):
+            if isnotblank(datarow[GGqcol]) or isnotblank(datarow[pricecol]):
                 adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Blank check failed")
                 return
 
@@ -126,7 +128,7 @@ def checkonewayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                     adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Price mismatch")
                     return
 
-                if pd.isna(GGselection) or GGselection not in valid_values:
+                if isblank(GGselection) or GGselection not in valid_values:
                     adderror(datarow['record'], GGquestion, datarow[GGqcol], "GG - Invalid value")
                     return
 
@@ -149,14 +151,14 @@ def checkonewayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
                         status = 0
 
             else:
-                if pd.notna(datarow[GGqcol]) or pd.notna(datarow[pricecol]):
+                if isnotblank(datarow[GGqcol]) or isnotblank(datarow[pricecol]):
                     adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Blank check failed")
                     return
     else:
         for itr in range(1, no_times + 1):
             pricecol = f"{priceq}_Lr{itr}"
             GGqcol = f"{GGquestion}_Lr{itr}"
-            if pd.notna(datarow[GGqcol]) or pd.notna(datarow[pricecol]):
+            if isnotblank(datarow[GGqcol]) or isnotblank(datarow[pricecol]):
                 adderror(datarow['record'], GGquestion, datarow[pricecol], "GG - Blank check failed")
                 return
                 

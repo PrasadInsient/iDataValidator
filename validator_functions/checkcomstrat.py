@@ -1,6 +1,8 @@
 import pandas as pd
 from logs import adderror
 from typing import List, Union, Tuple, Optional
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def checkcomstrat(
     valid_values: list,
@@ -49,5 +51,5 @@ def checkcomstrat(
                         adderror(datarow['record'], eachArr[index], datarow[eachArr[index]], 'Blank check failed')
     else:
         for each in comstrat_qid_cols:
-            if not pd.isnull(datarow[each]):
+            if isnotblank(datarow[each]):
                 adderror(datarow['record'], each, datarow[each], 'Blank check failed')

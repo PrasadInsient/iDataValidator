@@ -2,6 +2,9 @@ import pandas as pd
 from logs import adderror
 from typing import List, Optional, Any
 
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
+
 def checkrank(questionid: str, datacols: list, datarow: pd.Series, min_rank_value: int = 1, 
               max_rank_value: Optional[int] = None, ignore_cols: list = [], condition: bool = True):
     """

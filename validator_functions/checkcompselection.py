@@ -1,6 +1,8 @@
 import pandas as pd
 from logs import adderror
 from typing import List
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank
 
 def checkcompselection(
     question_id: str,
@@ -47,7 +49,7 @@ def checkcompselection(
 
         # Populate the codes dictionary and qualified priority codes
         for index, column in enumerate(familiarity_cols):
-            if pd.notna(data_row[column]) and column not in ignore_cols:
+            if isnotblank(data_row[column]) and column not in ignore_cols:
                 value = int(data_row[column])
                 if (index + 1) in priority_codes and value in priority_codes_qual_vals:
                     priority_codes_qualified.append(index + 1)

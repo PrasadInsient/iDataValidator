@@ -1,5 +1,8 @@
 import pandas as pd
 from logs import adderror
+from isblank import isblank
+from isnotblank import isnotblank
+
 
 def checknonblanks(questionid: str, datacols: list, datarow: pd.Series, ignore_cols: list = [], condition: bool = True):
     """
@@ -40,5 +43,5 @@ def checknonblanks(questionid: str, datacols: list, datarow: pd.Series, ignore_c
     if condition:
         for column in datacols:
             # If a column is null (blank), log an error
-            if pd.isnull(datarow[column]):
+            if isblank(datarow[column]):
                 adderror(datarow['record'], column, datarow[column], 'Non blank check failed')

@@ -3,6 +3,9 @@ from typing import List, Union, Callable, Optional, Tuple
 from logs import adderror
 from .checksum import checksum
 
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
+
 RangeTuple = Tuple[Union[int, float], Union[int, float]]
 
 def checksum100(questionid, datacols, datarow:pd.Series, sum_condition: str = '=100',ignore_cols=[],condition=True):

@@ -1,6 +1,9 @@
 import re
 import pandas as pd
 from logs import adderror
+from validator_functions import checkblanks
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclusive_cols=[],ignore_cols=[],
                  at_least=1, at_most=-1,txt_mnlen=1,txt_mxlen=None,allowblanks=False,required=1,condition=True):
@@ -46,6 +49,7 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
             adderror(datarow['record'], questionid, no_selections, 'Text exclusive check failed.')
 
     else:
-        for column in datacols:
-            if not pd.isnull(datarow[column]):
-                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
+        checkblanks(questionid,datacols,datarow)        
+#        for column in datacols:
+#            if not pd.isnull(datarow[column]):
+#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')

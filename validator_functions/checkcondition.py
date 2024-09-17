@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
+
 def checkcondition(value, condition: str) -> bool:
     """
     Checks if a given value satisfies a condition based on various operators such as '=', 'in', 'range', '>', '<', etc.
@@ -19,7 +22,7 @@ def checkcondition(value, condition: str) -> bool:
     Returns:
         bool: True if the value satisfies the condition, False otherwise.
     """
-    if pd.isna(value) or not value:
+    if isblank(value):
         return False
     
     # Check if condition starts with '=' and compare value for equality

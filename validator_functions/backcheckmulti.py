@@ -4,7 +4,8 @@ from logs import Error, ErrorLog,adderror
 from validator_functions.checkcondition import checkcondition
 import pandas as pd
 
-
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 class Question:
     def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
@@ -73,10 +74,10 @@ def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: Union[List
         # Perform the regular masking check on question_cols and maskcond_cols
         for q_col, m_col in zip(question_cols, cols_to_check):
             # If a question column contains a value, but the mask condition is not satisfied, log an error
-            if not pd.isna(datarow[q_col]) and not checkcondition(datarow[m_col], backcheckcondition):
+            if datarow[q_col]>0 and not checkcondition(datarow[m_col], backcheckcondition):
                 adderror(datarow['record'], questionid, datarow[q_col], f"Backcheck multi failed")
 
         # Check the always_showcols to ensure they always have a value (not null)
         for col in always_showcols: #type:ignore
-            if pd.isna(datarow[col]):
+            if isblank(datarow[col]):
                 adderror(datarow['record'], questionid, datarow[col], f"Backcheck multi failed")

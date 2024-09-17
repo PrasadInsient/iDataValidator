@@ -1,5 +1,8 @@
 import pandas as pd
 from logs import adderror
+from validator_functions import checkblanks
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank  
 
 def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_values: list, 
                    optional_cols: list = [], ignore_cols: list = [], allowblanks: bool = False, condition: bool = True):
@@ -52,7 +55,8 @@ def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_va
             if (not allowcolumnblank and pd.isnull(datarow[column])) or (pd.notnull(datarow[column]) and datarow[column] not in valid_values):
                 adderror(datarow['record'], column, datarow[column], 'Invalid Value')
     else:
+        checkblanks(questionid,datacols,datarow)
         # If the condition is False, check only for blanks
-        for column in datacols:
-            if not pd.isnull(datarow[column]):
-                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
+#        for column in datacols:
+#            if not pd.isnull(datarow[column]):
+#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
