@@ -47,7 +47,7 @@ def checkcomstrat(
                     if datarow[eachArr[index]] not in valid_values:
                         adderror(datarow['record'], eachArr[index], datarow[eachArr[index]], 'Invalid Value')
                 else:
-                    if not pd.isnull(datarow[eachArr[index]]):
+                    if isnotblank(datarow[eachArr[index]]):
                         adderror(datarow['record'], eachArr[index], datarow[eachArr[index]], 'Blank check failed')
     else:
         for each in comstrat_qid_cols:

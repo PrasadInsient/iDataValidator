@@ -52,11 +52,7 @@ def validatesingle(questionid: str, datacols: list, datarow: pd.Series, valid_va
         for column in datacols:
             allowcolumnblank = allowblanks or column in optional_cols
             # Check if the value is valid or if blanks are allowed
-            if (not allowcolumnblank and pd.isnull(datarow[column])) or (pd.notnull(datarow[column]) and datarow[column] not in valid_values):
+            if (not allowcolumnblank and isblank(datarow[column])) or (isnotblank(datarow[column]) and datarow[column] not in valid_values):
                 adderror(datarow['record'], column, datarow[column], 'Invalid Value')
     else:
         checkblanks(questionid,datacols,datarow)
-        # If the condition is False, check only for blanks
-#        for column in datacols:
-#            if not pd.isnull(datarow[column]):
-#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')

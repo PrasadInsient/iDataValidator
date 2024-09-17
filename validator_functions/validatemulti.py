@@ -67,11 +67,11 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
         for column in datacols:
             allowcolumnblank = allowblanks or column in optional_cols
             # Check if the value is valid or if blank values are allowed
-            if (not allowcolumnblank and pd.isnull(datarow[column])) or (pd.notnull(datarow[column]) and datarow[column] not in valid_values):
+            if (not allowcolumnblank and isblank(datarow[column])) or (isnotblank(datarow[column]) and datarow[column] not in valid_values):
                 adderror(datarow['record'], column, datarow[column], 'Invalid Value')
 
             # Count valid selections and exclusive selections
-            if pd.notnull(datarow[column]) and datarow[column] == 1:
+            if isnotblank(datarow[column]) and datarow[column] == 1:
                 if column in exclusive_cols:
                     no_exclusive_selections += 1
                 else:
@@ -98,6 +98,3 @@ def validatemulti(questionid: str, datacols: list, datarow: pd.Series, valid_val
     # If condition is False, perform only a blank check
     else:
         checkblanks(questionid,datacols,datarow)
-#        for column in datacols:
-#            if not pd.isnull(datarow[column]):
-#                adderror(datarow['record'], column, datarow[column], 'Blank check failed')

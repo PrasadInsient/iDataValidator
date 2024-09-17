@@ -87,7 +87,7 @@ def checkconjoint(datarow, conjointdesign,row_headers, conjointq, hattrq, no_tas
     else:
         for x in range(1,no_tasks + 1):
             conjoint_qid1=conjointq+"_Lr"+str(x) 
-            if pd.notnull(datarow[conjoint_qid1]): 
+            if isnotblank(datarow[conjoint_qid1]): 
                 adderror(datarow['record'], conjoint_qid1, x, f"conjoint blank check failed.")
 
   

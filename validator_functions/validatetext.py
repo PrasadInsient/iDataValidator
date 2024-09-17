@@ -23,7 +23,7 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
         for column in datacols:
             if column not in exclusive_cols:
                 allowcolumnnblank = allowblanks or column in optional_cols
-                if (not allowcolumnnblank and pd.isnull(datarow[column])):
+                if (not allowcolumnnblank and isblank(datarow[column])):
                     adderror(datarow['record'], column, datarow[column], 'Invalid Value')
                 else:
                     if pd.notnull(datarow[column]):
@@ -49,7 +49,4 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
             adderror(datarow['record'], questionid, no_selections, 'Text exclusive check failed.')
 
     else:
-        checkblanks(questionid,datacols,datarow)        
-#        for column in datacols:
-#            if not pd.isnull(datarow[column]):
-#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
+        checkblanks(questionid,datacols,datarow)

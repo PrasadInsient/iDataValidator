@@ -77,7 +77,7 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
             if column not in exclusive_cols:
                 allowcolumnblank = allowblanks or column in optional_cols
                 # Check if the value is within the valid range or if blanks are allowed
-                if (not allowcolumnblank and pd.isnull(datarow[column])) or (pd.notnull(datarow[column]) and not (range_param[0] <= datarow[column] <= range_param[1])):
+                if (not allowcolumnblank and isblank(datarow[column])) or (isnotblank(datarow[column]) and not (range_param[0] <= datarow[column] <= range_param[1])):
                     adderror(datarow['record'], column, datarow[column], 'Invalid Value')
 
             # Count valid selections and exclusive selections
@@ -108,6 +108,3 @@ def validatenumeric(questionid: str, datacols: List[str], datarow: pd.Series, op
     # If condition is False, perform only a blank check
     else:
         checkblanks(questionid,datacols,datarow)
-#        for column in datacols:
-#            if not pd.isnull(datarow[column]):
-#                adderror(datarow['record'], questionid, datarow[column], 'Blank check failed')
