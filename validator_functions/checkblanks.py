@@ -1,7 +1,7 @@
 import pandas as pd
 from logs import adderror
-from isblank import isblank
-from isnotblank import isnotblank
+from validator_functions.isblank import isblank
+from validator_functions.isnotblank import isnotblank
 
 
 def checkblanks(questionid: str, datacols: list, datarow: pd.Series, ignore_cols: list = [], condition: bool = True):

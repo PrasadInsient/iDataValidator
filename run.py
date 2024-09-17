@@ -72,9 +72,10 @@ def run_validation():
     tqdm.pandas(desc="Validating Records")
     def runv(row):
         nonlocal records_completed  # This allows modification of the outer scope variable
-        validator(row)
-        validatorx1(row)
-        validatorx2(row)
+        row_fill=row.fillna(False)
+        validator(row_fill)
+        validatorx1(row_fill)
+        validatorx2(row_fill)
         records_completed += 1
         return row
 
