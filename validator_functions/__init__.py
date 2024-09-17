@@ -16,3 +16,5 @@ from .vwcheck import vwcheck
 from .checkcompselection import checkcompselection
 from .checkmaxdiff import checkmaxdiff
 from .checkGG import checkonewayGG, checktwowayGG
+from .checkcomstrat import checkcomstrat
+from .checkconjoint import checkconjoint

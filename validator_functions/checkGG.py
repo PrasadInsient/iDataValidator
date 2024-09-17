@@ -1,6 +1,37 @@
 import pandas as pd
 from logs import adderror
 
+"""
+Validates a respondent's GG data 
+
+Parameters:
+-----------
+GGquestion : str
+    GGquestion Question id. Please pass without the Loopvar:label for ex: "Q_GG"
+
+datarow : pd.Series
+    A Pandas Series representing the respondent's data row with answers to the conjoint survey.
+
+GGprices : []]
+    List of GG prices.    
+
+priceq : str
+    Hidden price question where we are punching the price that respondent is going to see.
+    for ex: "hPrice_GG"    
+
+start_pos : 3
+    Starting position of the GG.    
+
+no_times : As it is a two way GG the default number of time the GG asked will be 3 if we have 5 prices.
+
+order: integer
+# Update direction and price index based on selection and order.
+
+condition : bool
+    Asking condition for the GG.
+    
+"""
+
 def checktwowayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str = "",
                   start_pos=3, no_times=3, hideinvalidoptions=1, order=1, condition: bool = True):
     

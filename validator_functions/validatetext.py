@@ -15,10 +15,12 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
     if condition:
         no_selections=0
         no_exclusive_selections=0
+        no_non_exclusive_selections=0
+
         for column in datacols:
             if column not in exclusive_cols:
                 allowcolumnnblank = allowblanks or column in optional_cols
-                if (not allowcolumnnblank and pd.isnull(datarow[column])) or (pd.notnull(datarow[column])):
+                if (not allowcolumnnblank and pd.isnull(datarow[column])):
                     adderror(datarow['record'], column, datarow[column], 'Invalid Value')
                 else:
                     if pd.notnull(datarow[column]):
@@ -30,6 +32,8 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
                 no_selections=no_selections+1
                 if column in exclusive_cols:
                     no_exclusive_selections=no_exclusive_selections+1
+                else:
+                    no_non_exclusive_selections += 1
 
         if required and no_selections==0:
             adderror(datarow['record'], questionid, no_selections, 'Text at least 1 check failed.')
@@ -38,7 +42,7 @@ def validatetext(questionid, datacols, datarow:pd.Series, optional_cols=[],exclu
                 adderror(datarow['record'], questionid, no_selections, 'Text at least N check failed.')
             if no_exclusive_selections==0 and at_most>1 and no_selections>at_most:
                 adderror(datarow['record'], questionid, no_selections, 'Text at most N check failed.')
-        if no_selections>0 and no_exclusive_selections>0:
+        if no_non_exclusive_selections>0 and no_exclusive_selections>0:
             adderror(datarow['record'], questionid, no_selections, 'Text exclusive check failed.')
 
     else:

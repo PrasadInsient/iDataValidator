@@ -50,6 +50,7 @@ def checkexclusive(questionid: str, datacols: list, datarow: pd.Series, exclusiv
     if condition:
         no_selections = 0
         no_exclusive_selections = 0
+        no_non_exclusive_selections=0
 
         # Loop through the columns and count selections
         for column in datacols:
@@ -57,6 +58,8 @@ def checkexclusive(questionid: str, datacols: list, datarow: pd.Series, exclusiv
             if pd.notnull(datarow[column]) and (iszerovalid or (not iszerovalid and datarow[column] != 0)):
                 if column in exclusive_cols:
                     no_exclusive_selections += 1
+                else:
+                    no_non_exclusive_selections += 1
                 no_selections += 1
 
         # Check for multiple exclusive selections
@@ -64,9 +67,9 @@ def checkexclusive(questionid: str, datacols: list, datarow: pd.Series, exclusiv
             adderror(datarow['record'], questionid, no_exclusive_selections, 'Exclusive check failed: More than one exclusive selection.')
 
         # Check if both exclusive and non-exclusive columns are selected
-        if no_exclusive_selections > 0 and no_selections > 0:
+        if no_exclusive_selections > 0 and no_non_exclusive_selections > 0:
             adderror(datarow['record'], questionid, no_selections, 'Exclusive check failed: Exclusive and non-exclusive selections both made.')
 
         # If oneway is enabled, check if no selections were made
-        if not oneway and (no_selections == 0 and no_exclusive_selections==0):
+        if not oneway and (no_non_exclusive_selections == 0 and no_exclusive_selections==0):
             adderror(datarow['record'], questionid, no_selections, 'Exclusive check failed: No selections made.')

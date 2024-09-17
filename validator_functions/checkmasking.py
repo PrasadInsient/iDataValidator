@@ -1,12 +1,22 @@
 import pandas as pd
-from typing import  List, Optional
+from typing import  List, Optional, Union
 from logs import Error, ErrorLog,adderror
 from validator_functions.checkcondition import checkcondition
 import pandas as pd
 
-def checkmasking(questionid,datarow:pd.Series,question_cols: List[str], maskcond_cols: List[str], 
-                 maskcondition: str ="=1",  always_showcols: List[str]=[], condition= True):
 
+class Question:
+    def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
+        self.id:str = id
+        self.type:str = type
+        self.datacols:List[str] = datacols
+        self.oecols:List[str] = oecols
+        self.parent_record = parent_record
+
+def checkmasking(questionid,datarow:pd.Series,question_cols: Union[List[str],Question], maskcond_cols: Union[List[str],Question], 
+                 maskcondition: str ="=1",  always_showcols: Union[str,List[str]]=[], condition= True):
+
+    
     """
     Perform a masking check on specified columns in a row of survey data. The function checks whether certain 
     columns (from `question_cols`) should be shown or hidden based on conditions applied to corresponding columns 
@@ -47,7 +57,15 @@ def checkmasking(questionid,datarow:pd.Series,question_cols: List[str], maskcond
         # Create a copy of the row to avoid modifying the original data
         datarow = datarow.copy()
 
+        if isinstance(question_cols, Question):
+            question_cols = question_cols.datacols
+        if isinstance(maskcond_cols, Question):
+            maskcond_cols = maskcond_cols.datacols
+        if isinstance(always_showcols, str):
+            always_showcols=[always_showcols]
+
         # Exclude columns in always_showcols from question_cols
+
         question_cols = [col for col in question_cols if col not in always_showcols]
         
         # Perform the regular masking check on question_cols and maskcond_cols
