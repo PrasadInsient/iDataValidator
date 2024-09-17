@@ -1,11 +1,21 @@
 import pandas as pd
-from typing import  List, Optional
+from typing import  List, Optional, Union
 from logs import Error, ErrorLog,adderror
 from validator_functions.checkcondition import checkcondition
 import pandas as pd
 
-def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: List[str],  cols_to_check: List[str],backcheckcondition: str ="=1",  
-        always_showcols: List[str]=[],ignoresourcecols:List[str]=[],ignoretargetcols:List[str]=[],condition= True):
+
+
+class Question:
+    def __init__(self,id, type, parent_record,datacols=[],oecols=[]):
+        self.id:str = id
+        self.type:str = type
+        self.datacols:List[str] = datacols
+        self.oecols:List[str] = oecols
+        self.parent_record = parent_record
+
+def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: Union[List[str],Question],  cols_to_check: Union[List[str],Question],backcheckcondition: str ="=1",  
+        always_showcols: Union[List[str],Question]=[],ignoresourcecols:List[str]=[],ignoretargetcols:List[str]=[],condition= True):
 
     """
 
@@ -47,6 +57,13 @@ def backcheckmulti(questionid: str, datarow: pd.Series,question_cols: List[str],
     if condition:
         # Create a copy of the row to avoid modifying the original data
         datarow = datarow.copy()
+
+        if isinstance(question_cols, Question):
+            question_cols = question_cols.datacols
+        if isinstance(cols_to_check, Question):
+            cols_to_check = cols_to_check.datacols
+        if isinstance(always_showcols, str):
+            always_showcols=[always_showcols]
 
         # Exclude columns in always_showcols from question_cols
         question_cols = [col for col in question_cols if col not in always_showcols and col not in ignoretargetcols]
