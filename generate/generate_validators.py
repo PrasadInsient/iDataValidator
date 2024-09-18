@@ -128,6 +128,7 @@ def write_common_imports(f):
         "from logs import geterrors",
         "from functools import partial",
         "from config import *",
+        "from inits import *",
     ]
     f.write("\n".join(imports) + "\n\n")
 

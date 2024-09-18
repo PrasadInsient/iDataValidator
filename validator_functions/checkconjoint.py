@@ -6,7 +6,7 @@ from config import *
 from validator_functions.isblank import isblank
 from validator_functions.isnotblank import isnotblank  
 
-def checkconjoint(datarow, conjointdesign,row_headers, conjointq, hattrq, no_tasks, no_options, version,condition):
+def checkconjoint(datarow, conjointdesign:pd.DataFrame,row_headers, conjointq, hattrq, no_tasks, no_options, version,condition):
     """
     Validates a respondent's conjoint data row against the predefined conjoint design.
 
@@ -51,21 +51,17 @@ def checkconjoint(datarow, conjointdesign,row_headers, conjointq, hattrq, no_tas
     -------
     - Calls `adderror()` for any mismatches or invalid values found during validation.
     """
-    if condition:
-        # Load the design file into a DataFrame
-        designfile_path = os.path.join(BASE_DIR, 'data', conjointdesign)
-        df_design_conjoint = pd.read_csv(designfile_path)
-        
+    if condition:        
         for x in range(1,no_tasks + 1):
             conjoint_qid1=conjointq+"_Lr"+str(x)
             conjoint_vals=[each for each in range(1,no_options+1)]
             if datarow[conjoint_qid1] not in conjoint_vals:
                 adderror(datarow['record'], conjoint_qid1, x, f"conjoint contain invalid values")
 
-        rslt_df1 = df_design_conjoint.loc[(df_design_conjoint['Version']==version) & (df_design_conjoint['Concept']==1)]
-        rslt_df2 = df_design_conjoint.loc[(df_design_conjoint['Version']==version) & (df_design_conjoint['Concept']==2)]
-        rslt_df3 = df_design_conjoint.loc[(df_design_conjoint['Version']==version) & (df_design_conjoint['Concept']==3)]
-        rslt_df4 = df_design_conjoint.loc[(df_design_conjoint['Version']==version) & (df_design_conjoint['Concept']==4)]
+        rslt_df1 = conjointdesign.loc[(conjointdesign['Version']==version) & (conjointdesign['Concept']==1)]
+        rslt_df2 = conjointdesign.loc[(conjointdesign['Version']==version) & (conjointdesign['Concept']==2)]
+        rslt_df3 = conjointdesign.loc[(conjointdesign['Version']==version) & (conjointdesign['Concept']==3)]
+        rslt_df4 = conjointdesign.loc[(conjointdesign['Version']==version) & (conjointdesign['Concept']==4)]
         
         for loop in np.arange(1,no_tasks + 1):
             for index,rowheader in enumerate(row_headers):

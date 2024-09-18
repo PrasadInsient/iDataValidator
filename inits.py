@@ -1,0 +1,30 @@
+import os
+import pandas as pd
+from config import *
+
+#CONJOINT_DESIGN_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#CONJOINT_DESIGN = pd.read_csv(CONJOINT_DESIGN_FILEPATH)
+
+#CONJOINT_DESIGN1_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#CONJOINT_DESIGN1 = pd.read_csv(CONJOINT_DESIGN1_FILEPATH)
+
+#CONJOINT_DESIGN2_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#CONJOINT_DESIGN2 = pd.read_csv(CONJOINT_DESIGN2_FILEPATH)
+
+#CONJOINT_DESIGN3_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#CONJOINT_DESIGN3 = pd.read_csv(CONJOINT_DESIGN3_FILEPATH)
+
+
+
+#MAXDIFF_DESIGN_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#MAXDIFF_DESIGN = pd.read_csv(MAXDIFF_DESIGN_FILEPATH)
+
+#MAXDIFF_DESIGN1_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#MAXDIFF_DESIGN1 = pd.read_csv(MAXDIFF_DESIGN1_FILEPATH)
+
+#MAXDIFF_DESIGN2_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#MAXDIFF_DESIGN2 = pd.read_csv(MAXDIFF_DESIGN2_FILEPATH)
+
+#MAXDIFF_DESIGN3_FILEPATH = os.path.join(BASE_DIR, 'data', '')
+#MAXDIFF_DESIGN3 = pd.read_csv(MAXDIFF_DESIGN3_FILEPATH)
+

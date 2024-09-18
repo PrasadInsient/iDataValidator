@@ -4,7 +4,7 @@ from logs import adderror
 from config import *
 from validator_functions.isblank import isblank
 from validator_functions.isnotblank import isnotblank  
-def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options, version,condition):
+def checkmaxdiff(datarow, maxdiffdesign:pd.DataFrame, maxdiffq, hattrq, no_tasks, no_options, version,condition):
     """
     Validate MaxDiff data for each task in a given row of data.
 
@@ -37,10 +37,6 @@ def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options,
         Logs errors via `adderror` if validation fails.
     """
     if condition:
-        # Load the design file into a DataFrame
-        designfile_path = os.path.join(BASE_DIR, 'data', maxdiffdesign)
-        df_design_maxdiff = pd.read_csv(designfile_path)
-
         for task in range(1, no_tasks + 1):
             mostcol = f"{maxdiffq}_Lr{task}c1"
             leastcol = f"{maxdiffq}_Lr{task}c2"
@@ -51,7 +47,7 @@ def checkmaxdiff(datarow, maxdiffdesign, maxdiffq, hattrq, no_tasks, no_options,
 
             # Get the design values for this task
             codeNum = f"{version}_{task}"
-            listX = df_design_maxdiff[codeNum].iloc[0].split("#")  # Get the design options as a list
+            listX = maxdiffdesign[codeNum].iloc[0].split("#")  # Get the design options as a list
             listX = [int(item) for item in listX]  # Convert the design list to integers
 
             # Check if the values in MaxDiff columns are valid according to the design
