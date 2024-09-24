@@ -47,7 +47,8 @@ def checktwowayGG(GGquestion: str, datarow: pd.Series, GGprices=[], priceq: str 
         for itr in range(1, no_times + 1):
             pricecol = f"{priceq}_Lr{itr}"
             GGqcol = f"{GGquestion}_Lr{itr}"
-            pGGval = datarow[f"{GGquestion}_Lr{itr-1}"]
+            if itr >1:
+                pGGval = datarow[f"{GGquestion}_Lr{itr-1}"]
             
             if status == 1:
                 valid_values = []
