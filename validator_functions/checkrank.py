@@ -35,18 +35,23 @@ def checkrank(questionid: str, datacols: list, datarow: pd.Series, min_rank_valu
     if condition:
         # Filter columns to check based on ignore_cols
         columns_to_check = [col for col in datacols if col not in ignore_cols]
-        
         # If max_rank_value is not provided, set it to the number of columns being checked
         if max_rank_value is None:
             max_rank_value = len(columns_to_check)
-
-        # Drop NA values and ensure all values are unique
-        values = datarow[columns_to_check].dropna().unique()
-
-        # Check for duplicate rank values
-        if len(values) != datarow[columns_to_check].dropna().size:
-            adderror(datarow['record'], questionid, "", "checkrank - Duplicate values found.")
-
+        rank_values=[]
+        for each in columns_to_check:
+            if datarow[each] >0:
+                if datarow[each] not in rank_values:
+                    rank_values.append(datarow[each])
+                else:
+                    adderror(datarow['record'], questionid, "", "checkrank - Duplicate values found.")
+                    return
         # Check if all rank values are within the allowed range
-        elif not all(min_rank_value <= val <= max_rank_value for val in values):
+        if not all(min_rank_value <= val <= max_rank_value for val in rank_values):
             adderror(datarow['record'], questionid, "", "checkrank - Rank out of range.")
+    else:
+        columns_to_check = [col for col in datacols if col not in ignore_cols]
+        for each in columns_to_check:
+            if isnotblank(datarow[each]):
+                adderror(datarow['record'], each, "", "checkrank - blanks check faied.")
+

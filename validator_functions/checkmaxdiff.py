@@ -39,41 +39,6 @@ def checkmaxdiff(datarow, maxdiffdesign:pd.DataFrame, maxdiffq, hattrq, no_tasks
     None
         Logs errors via `adderror` if validation fails.
 
-    if condition:
-        for task in range(1, no_tasks + 1):
-            if loop_prefix==1:
-                mostcol = f"{maxdiffq}_Lr{task}c1"
-                leastcol = f"{maxdiffq}_Lr{task}c2"
-            else:
-                mostcol = f"{maxdiffq}_{task}c1"
-                leastcol = f"{maxdiffq}_{task}c2"
-
-            # Check if the two MaxDiff columns have the same values
-            if datarow[mostcol] == datarow[leastcol]:
-                adderror(datarow['record'], maxdiffq,task,f"MaxDiff columns have the same value")
-
-            # Get the design values for this task
-            codeNum = f"{version}_{task}"
-            max_diff_val=maxdiffdesign.loc[(maxdiffdesign['id']==codeNum)]
-            if datarow['record'] <100:
-                print (max_diff_val)
-            listX = max_diff_val.iloc[0].split("#")  # Get the design options as a list
-            listX = [int(item) for item in listX]  # Convert the design list to integers
-
-            # Check if the values in MaxDiff columns are valid according to the design
-            if (datarow[mostcol] not in listX) or (datarow[leastcol] not in listX):
-                adderror(datarow['record'], maxdiffq, task, f"MaxDiff columns contain invalid values")
-
-            # Validate each option based on hAttrQ
-            for opt in range(1, no_options + 1):
-                if loop_prefix==1:
-                    attr_col = f"{hattrq}_Lr{task}{opt}"
-                else:
-                    attr_col = f"{hattrq}_{task}{opt}"
-
-                if datarow[attr_col] != listX[opt - 1]:  # Check if each attribute matches the design
-                    adderror(datarow['record'], maxdiffq, task,f"MaxDiff design error for option")
-
     """
     if condition:
         rslt_df = maxdiffdesign.loc[(maxdiffdesign['Version']==version)]
