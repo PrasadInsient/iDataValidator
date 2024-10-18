@@ -1,13 +1,18 @@
 import json
-from utils import GetQuestions, replace_non_ascii
+from utils import GetQuestions, replace_non_ascii,IS_GetQuestions
+import config
 
 def generate_questions(DATA_MAP_PATH:str,DATA_PATH:str):
-    DATA_PATH = DATA_PATH.replace("\\","\\\\")
-    with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
-        data_map = json.load(file)
-        data_map_cleaned = replace_non_ascii(data_map)
+    questions = []
+    if config.PLATFORM=="IS":
+         questions = IS_GetQuestions()
+    else:
+        DATA_PATH = DATA_PATH.replace("\\","\\\\")
+        with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
+            data_map = json.load(file)
+            data_map_cleaned = replace_non_ascii(data_map)
 
-    questions = GetQuestions(data_map_cleaned)
+        questions = GetQuestions(data_map_cleaned)
     if len(questions)==0:
          return False
 

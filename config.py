@@ -10,7 +10,7 @@ BASE_DIR = current_dir
 datapath_temp = os.path.join(BASE_DIR, 'data', 'surveydata.csv')
 datamapath_temp = os.path.join(BASE_DIR, 'data', 'datamap.json')
 
-
+PLATFORM="IS"
 DATA_PATH:str = fr"{datapath_temp}"
 DATA_MAP_PATH:str =  fr"{datamapath_temp}"
 HEADERS = {"x-apikey": API_KEY}

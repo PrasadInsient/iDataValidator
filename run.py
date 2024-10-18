@@ -2,7 +2,7 @@ import argparse
 import datetime
 import os
 import pandas as pd
-from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL, DATA_MAP_PATH, METHOD
+from config import DATA_PATH, DATA_URL, HEADERS, DATA_MAP_URL, DATA_MAP_PATH, METHOD, PLATFORM
 from generate.fetch_data import fetch_data
 from generate.fetch_data_map import fetch_data_map
 from survey_model.questions import Questions

@@ -1,13 +1,18 @@
 import json
-from utils import GetColumns, replace_non_ascii
+from utils import GetColumns, replace_non_ascii,IS_GetColumns
+import config
 
 def generate_columns(DATA_MAP_PATH:str,DATA_PATH:str)->bool:
-    DATA_PATH = DATA_PATH.replace("\\","\\\\")
-    with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
-        data_map = json.load(file)
-        data_map_cleaned = replace_non_ascii(data_map)
-    
-    columns = GetColumns(data_map_cleaned)
+    columns = []
+    if config.PLATFORM=="IS":
+        columns = IS_GetColumns()
+    else:
+        DATA_PATH = DATA_PATH.replace("\\","\\\\")
+        with open(DATA_MAP_PATH, 'r', encoding='utf-8') as file:
+            data_map = json.load(file)
+            data_map_cleaned = replace_non_ascii(data_map)
+        
+        columns = GetColumns(data_map_cleaned)
 
     survey_file = 'survey_model/columns.py'
     
